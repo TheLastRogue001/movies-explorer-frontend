@@ -85,6 +85,10 @@
   border: none;
   background: #202020;
 }
+.profile__exit:hover {
+  opacity: 0.7;
+  transition: opacity 0.5s, visibility 0s linear;
+}
 .profile__redit {
   color: #fff;
   text-align: center;
@@ -95,6 +99,12 @@
   line-height: normal;
   background: #202020;
   border: none;
+  transition: opacity 0.5s, visibility 0s linear;
+  opacity: 1;
+}
+.profile__redit:hover {
+  opacity: 0.7;
+  transition: opacity 0.5s, visibility 0s linear;
 }
 .profile__save {
   color: #fff;
@@ -105,7 +115,16 @@
   font-weight: 500;
   line-height: normal;
   height: 45px;
+  border: none;
   border-radius: 3px;
+  background: #3456f3;
+  transition: opacity 0.5s, visibility 0s linear;
+  opacity: 1;
+}
+.profile__save:hover {
+  border-radius: 3px;
+  opacity: 0.8;
+  transition: opacity 0.5s, visibility 0s linear;
   background: #3456f3;
 }
 

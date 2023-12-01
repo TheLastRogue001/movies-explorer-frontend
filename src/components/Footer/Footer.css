@@ -64,6 +64,13 @@
   font-weight: 400;
   line-height: normal;
   margin: 0;
+  opacity: 1;
+  transition: opacity 0.5s, visibility 0s linear;
+}
+
+.footer__link:hover {
+  opacity: 0.7;
+  transition: opacity 0.5s, visibility 0s linear;
 }
 
 @media screen and (max-width: 1258px) {
