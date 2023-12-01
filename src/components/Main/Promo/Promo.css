@@ -1,0 +1,53 @@
+.praktikum {
+  max-width: 1280px;
+}
+.praktikum__components {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  background: #073042;
+}
+
+.praktikum__logo {
+  margin: 82px auto 122px;
+  max-width: 319.996px;
+  flex-shrink: 0;
+}
+
+.praktikum__title {
+  position: absolute;
+  color: #fff;
+  max-width: 730px;
+  text-align: center;
+  font-family: Inter;
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 58px;
+  letter-spacing: -2px;
+  margin-top: -2px;
+}
+
+@media screen and (max-width: 500px) {
+  .praktikum__title {
+    position: absolute;
+    color: #fff;
+    max-width: 300px;
+    text-align: center;
+    font-family: Inter;
+    font-size: 31px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 39px;
+    letter-spacing: -1.24px;
+    margin: 0;
+    margin-bottom: 38px;
+  }
+  .praktikum__logo {
+    margin: 142px 36px 180px;
+    max-width: 248.005px;
+  }
+}

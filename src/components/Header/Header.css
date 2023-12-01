@@ -35,7 +35,7 @@
   column-gap: 16px;
 }
 
-.header__caption {
+.header__h2 {
   text-decoration: none;
   background-color: inherit;
   border: none;
@@ -49,7 +49,7 @@
   margin: 0;
 }
 
-.header__caption-profile {
+.header__h2-profile {
   color: #fff;
   font-feature-settings: "clig" off, "liga" off;
   font-family: Inter;
@@ -89,11 +89,9 @@
 }
 
 .header__logo {
-  margin: 0;
+  margin: 18px 0 0 70px;
   width: 38px;
-  margin-bottom: 18px;
-  margin-left: 70px;
-  margin-top: 18px;
+  height: 38px;
 }
 
 .header__container {
@@ -139,9 +137,11 @@
   font-style: normal;
   font-weight: 500;
   line-height: 16px;
+  text-decoration: none;
 }
 
 .header__signup {
+  text-decoration: none;
   color: #fff;
   text-align: right;
   font-family: Inter;
@@ -151,7 +151,47 @@
   line-height: 16px;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 1278px) {
+  .header__logo {
+    margin: 18px 0 0 70px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .header__components-profile {
+    margin: 21px 30px 21px 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    margin: 0 auto;
+  }
+
+  .header__components {
+    margin: 21px 30px 21px 0;
+  }
+
+  .header__logo {
+    margin: 18px 0 0 30px;
+    width: 38px;
+  }
+
+  .header__menu {
+    display: inline-block;
+    margin: 15px 25px 15px 0;
+  }
+
+  .header__components-profile {
+    display: none;
+  }
+
+  .header__pages {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 550px) {
   .header__signin {
     display: flex;
     justify-content: center;
@@ -169,39 +209,21 @@
     line-height: 16px;
   }
 
-  .header__signup {
-    font-size: 10px;
-  }
-  .header__components {
-    column-gap: 14px;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .header {
-    margin: 0 auto;
-  }
-
   .header__logo {
+    margin: 18px 0 0 14px;
     width: 38px;
-    margin-left: 27px;
-    margin-bottom: 18px;
-  }
-
-  .header__components {
-    margin-right: 14px;
   }
 
   .header__menu {
     display: inline-block;
+    margin: 18px 0 21px 0;
   }
 
-  .header__components-profile {
-    display: none;
+  .header__signup {
+    font-size: 10px;
   }
-
-  .header__pages {
-    display: none;
+  .header__components {
+    margin: 24px 14px 24px 0;
+    column-gap: 14px;
   }
 }
-

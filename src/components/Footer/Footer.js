@@ -1,7 +1,7 @@
 import { Routes, Route, Link } from "react-router-dom";
 import "./Footer.css";
 
-function Footer() {
+const getFooter = () => {
   return (
     <footer className="footer">
       <div className="footer__container">
@@ -10,7 +10,7 @@ function Footer() {
         </h2>
       </div>
       <div className="footer__info">
-        <caption className="footer__caption">© 2023</caption>
+        <label className="footer__label">© 2023</label>
         <div className="footer__links">
           <a
             className="footer__link"
@@ -29,6 +29,16 @@ function Footer() {
         </div>
       </div>
     </footer>
+  );
+};
+
+function Footer() {
+  return (
+    <Routes>
+      <Route path="/" element={getFooter()} />
+      <Route path="/movies" element={getFooter()} />
+      <Route path="/saved-movies" element={getFooter()} />
+    </Routes>
   );
 }
 

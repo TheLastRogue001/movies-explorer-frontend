@@ -1,0 +1,90 @@
+.movies__card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+  background: #222;
+  box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.08);
+}
+.movies__info {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0 16px 16px;
+}
+.movies__title {
+  max-width: 300px;
+  width: 100%;
+  color: #fff;
+  font-family: Inter;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin: 0;
+  margin-top: 16px;
+}
+.movies__time {
+  color: #8b8b8b;
+  font-family: Inter;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.movies__like {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  background-image: url(../../../images/like.svg);
+  background-color: #222;
+  border: none;
+  margin-top: 9px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  align-self: center;
+  transition: opacity 0.5s, visibility 0s linear;
+}
+.movies__like:hover {
+  opacity: 0.5;
+  transition: opacity 0.5s, visibility 0s linear;
+}
+.movies__like_active {
+  opacity: 1;
+  background-image: url(../../../images/like-active.svg);
+}
+.movies__remove {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  background-image: url(../../../images/remove-movie.svg);
+  background-color: #222;
+  border: none;
+  margin-top: 9px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: auto;
+}
+@media screen and (max-width: 1278px) {
+  .movies__card {
+    width: 339px;
+    height: 262px;
+  }
+  .movies__title {
+    max-width: 260px;
+    width: 100%;
+    margin: 15px 17px 0 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .movies__card {
+    width: 300px;
+    height: 240px;
+    margin: 0px;
+  }
+  .movies__title {
+    max-width: 220px;
+    width: 100%;
+  }
+}

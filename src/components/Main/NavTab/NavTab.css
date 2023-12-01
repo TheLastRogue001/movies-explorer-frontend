@@ -1,0 +1,31 @@
+.praktikum__links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 40px;
+  margin: 24px auto;
+  flex-shrink: 0;
+  background: #272727;
+}
+
+.praktikum__link {
+  color: #fff;
+  font-family: Inter;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  text-decoration-line: underline;
+}
+
+@media screen and (max-width: 500px) {
+  .praktikum__links {
+    column-gap: 24px;
+    margin: 24px 53px;
+    flex-shrink: 0;
+    background: #272727;
+  }
+  .praktikum__link {
+    font-size: 11px;
+  }
+}

@@ -37,7 +37,7 @@
   padding: 20px 0;
 }
 
-.footer__caption {
+.footer__label {
   color: #fff;
   font-feature-settings: "clig" off, "liga" off;
   font-family: Inter;
@@ -64,4 +64,53 @@
   font-weight: 400;
   line-height: normal;
   margin: 0;
+}
+
+@media screen and (max-width: 1258px) {
+  .footer {
+    padding: 0 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .footer {
+    padding: 0 30px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .footer {
+    padding: 0 10px;
+  }
+
+  .footer__container {
+    padding-bottom: 21px;
+  }
+
+  .footer__info {
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1140px;
+    row-gap: 30px;
+    width: 100%;
+    padding: 30px 0;
+  }
+
+  .footer__links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .footer__label {
+    color: #8b8b8b;
+    font-size: 12px;
+  }
+
+  .footer__h2 {
+    font-size: 12px;
+  }
 }

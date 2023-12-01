@@ -1,14 +1,14 @@
-import Logo from "../../images/logo.svg";
-import Menu from "../../images/menu.svg";
-import Profile from "../../images/icon-profile.svg";
+import { IconProfile, Logo, Menu } from "../../images";
 import { Routes, Route, Link } from "react-router-dom";
 import "./Header.css";
 
-const getHeader = () => {
+const getHeader = (onNavigationClick) => {
   return (
     <header className="header header__movies">
       <div className="header__container">
-        <img className="header__logo" alt="Movies" src={Logo} />
+        <Link className="header__main" to="/">
+          <img className="header__logo" alt="Movies" src={Logo} />
+        </Link>
         <div className="header__pages">
           <Link className="header__link" to="/movies">
             Фильмы
@@ -26,23 +26,24 @@ const getHeader = () => {
         type="checkbox"
         name="menu"
         id="info-header"
+        onClick={onNavigationClick}
       />
       <Link
         to="/profile"
         className="header__components header__components-profile"
       >
-        <caption className="header__caption header__caption-profile">
+        <h2 className="header__h2 header__h2-profile">
           Аккаунт
-        </caption>
+        </h2>
         <div className="header__img-profile">
-          <img src={Profile} className="header__img" alt="profile" />
+          <img src={IconProfile} className="header__img" alt="profile" />
         </div>
       </Link>
     </header>
   );
 };
 
-function Header() {
+function Header({onNavigationClick}) {
   return (
     <Routes>
       <Route
@@ -69,9 +70,9 @@ function Header() {
           </header>
         }
       />
-      <Route path="/profile" element={getHeader()} />
-      <Route path="/movies" element={getHeader()} />
-      <Route path="/saved-movies" element={getHeader()} />
+      <Route path="/profile" element={getHeader(onNavigationClick)} />
+      <Route path="/movies" element={getHeader(onNavigationClick)} />
+      <Route path="/saved-movies" element={getHeader(onNavigationClick)} />
     </Routes>
   );
 }
