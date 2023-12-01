@@ -14,7 +14,9 @@ function Profile() {
               setDisabled(true);
             }}
             className="profile__save"
-          >Сохранить</button>
+          >
+            Сохранить
+          </button>
         </div>
       );
     }
@@ -39,18 +41,20 @@ function Profile() {
       <div className="profile__container">
         <h1 className="profile__title">Привет, {name}!</h1>
         <div className="profile__name">
-          <caption className="profile__caption">Имя</caption>
+          <label className="profile__caption">Имя</label>
           <input
             disabled={disabled}
             placeholder="Алекс"
+            onChange={() => {}}
             className="profile__input"
           />
         </div>
         <div className="profile__email">
-          <caption className="profile__caption">E-mail</caption>
+          <label className="profile__caption">E-mail</label>
           <input
             disabled={disabled}
             placeholder="sasha0908@mail.ru"
+            onChange={() => {}}
             className="profile__input"
           />
         </div>

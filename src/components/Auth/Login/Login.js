@@ -17,7 +17,7 @@ function Login() {
       <Link className="sign__main" to="/">
         <img className="sign__img" src={Logo} alt="Logo" />
       </Link>
-      <caption className="sign__title">Рады видеть!</caption>
+      <label className="sign__title">Рады видеть!</label>
       <form className="sign__form" name="login">
         <div className="sign__components">
           <div className="sign__container">
@@ -26,6 +26,7 @@ function Login() {
               id="email"
               type="email"
               name="email"
+              onChange={() => {}}
               value={formValue.email}
               className="sign__input"
             ></input>
@@ -36,16 +37,15 @@ function Login() {
               id="password"
               type="password"
               name="password"
+              onChange={() => {}}
               value={formValue.password}
               className="sign__input"
             ></input>
           </div>
         </div>
-        <button className="sign__button">
-          Войти
-        </button>
+        <button className="sign__button">Войти</button>
         <div className="sign__register">
-          <caption className="sign__caption">Ещё не зарегистрированы?</caption>
+          <p className="sign__p">Ещё не зарегистрированы?</p>
           <Link to="/signup" className="sign__link">
             Регистрация
           </Link>
