@@ -7,11 +7,11 @@ const Portfolio = () => {
     <div className="student__sites">
       <h2 className="student__portfolio">Портфолио</h2>
       <Link target="_blank" to="/static" className="student__link">
-        <caption className="student__info">Статичный сайт</caption>
+        <h3 className="student__info">Статичный сайт</h3>
         <img className="student__arrow" src={Arrow} alt="Arrow" />
       </Link>
       <Link target="_blank" to="/adaptive" className="student__link">
-        <caption className="student__info">Адаптивный сайт</caption>
+        <h3 className="student__info">Адаптивный сайт</h3>
         <img className="student__arrow" src={Arrow} alt="Arrow" />
       </Link>
       <a
@@ -20,7 +20,7 @@ const Portfolio = () => {
         className="student__link"
         href="http://fox.nomoredomainsrocks.ru/"
       >
-        <caption className="student__info">Одностраничное приложение</caption>
+        <h3 className="student__info">Одностраничное приложение</h3>
         <img className="student__arrow" src={Arrow} alt="Arrow" />
       </a>
     </div>

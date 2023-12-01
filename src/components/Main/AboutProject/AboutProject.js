@@ -7,27 +7,27 @@ const AboutProject = () => {
       <div className="project__container">
         <div className="project__text">
           <h2 className="project__h2">Дипломный проект включал 5 этапов</h2>
-          <caption className="project__caption">
+          <p className="project__p">
             Составление плана, работу над бэкендом, вёрстку, добавление
             функциональности и финальные доработки.
-          </caption>
+          </p>
         </div>
         <div className="project__text">
           <h2 className="project__h2">На выполнение диплома ушло 5 недель</h2>
-          <caption className="project__caption">
+          <p className="project__p">
             У каждого этапа был мягкий и жёсткий дедлайн, которые нужно было
             соблюдать, чтобы успешно защититься.
-          </caption>
+          </p>
         </div>
       </div>
       <div className="project__progress">
         <div className="project__back-end">
-          <caption className="project__one-week">1 неделя</caption>
-          <caption className="project__info">Back-end</caption>
+          <label className="project__one-week">1 неделя</label>
+          <h3 className="project__info">Back-end</h3>
         </div>
         <div className="project__front-end">
-          <caption className="project__four-week">4 недели</caption>
-          <caption className="project__info">Front-end</caption>
+          <label className="project__four-week">4 недели</label>
+          <h3 className="project__info">Front-end</h3>
         </div>
       </div>
     </section>

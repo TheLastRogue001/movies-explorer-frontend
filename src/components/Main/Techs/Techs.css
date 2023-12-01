@@ -42,7 +42,7 @@
   margin: 0;
 }
 
-.tehnology__caption {
+.tehnology__p {
   max-width: 460px;
   color: #fff;
   text-align: center;
@@ -93,7 +93,7 @@
     letter-spacing: -0.48px;
     border-radius: 10px;
   }
-  .tehnology__caption {
+  .tehnology__p {
     font-size: 12px;
     line-height: 18px;
     letter-spacing: -0.48px;
@@ -123,7 +123,7 @@
     letter-spacing: -1.2px;
     margin: 0;
   }
-  .tehnology__caption {
+  .tehnology__p {
     font-size: 11px;
     line-height: 16px;
     letter-spacing: -0.44px;

@@ -48,7 +48,7 @@
   margin: 0;
 }
 
-.project__caption {
+.project__p {
   text-align: left;
   max-width: 550px;
   color: #fff;
@@ -129,7 +129,7 @@
   .project__container {
     column-gap: 30px;
   }
-  .project__caption {
+  .project__p {
     font-size: 12px;
     line-height: 18px;
   }
@@ -151,7 +151,7 @@
     column-gap: 30px;
     row-gap: 56px;
   }
-  .project__caption {
+  .project__p {
     font-size: 11px;
     line-height: 16px;
   }
