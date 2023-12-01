@@ -8,7 +8,7 @@ import "./SavedMovies.css";
 // import * as auth from "../utils/auth";
 
 function SavedMovies() {
-  const [short, setShort] = useState(true);
+  const [short, setShort] = useState(false);
   const [remove, setRemove] = useState(true);
   return (
     <div className="movies">

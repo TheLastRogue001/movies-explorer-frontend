@@ -8,7 +8,7 @@ import "./Movies.css";
 // import * as auth from "../utils/auth";
 
 function Movies() {
-  const [short, setShort] = useState(true);
+  const [short, setShort] = useState(false);
 
   return (
     <div className="movies">
