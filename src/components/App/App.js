@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import Adaptive from "./website/adaptive/index";
-import Static from "./website/statics/index";
+import Adaptive from "./web/adaptive/index";
+import Static from "./web/statics/index";
 import Login from "../Auth/Login/Login";
 import NotFoundPage from "../Auth/NotFound/NotFoundPage";
 import Register from "../Auth/Register/Register";

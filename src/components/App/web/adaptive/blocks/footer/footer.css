@@ -1,0 +1,21 @@
+.footer-adaptive {
+  grid-area: footer;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: end;
+  margin: 1.5rem 3rem 1.5rem;
+}
+@media screen and (max-width: 1023px) {
+  .footer-adaptive {
+    margin: 5.5rem 1.5rem 1.5rem;
+    align-items: flex-start;
+    grid-gap: 2rem;
+  }
+}
+@media screen and (max-width: 767px) {
+  .footer-adaptive {
+    flex-direction: column;
+    margin: 4rem 1rem 1.5rem;
+    grid-gap: 0;
+  }
+}

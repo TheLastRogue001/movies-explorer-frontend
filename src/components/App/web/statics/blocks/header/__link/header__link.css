@@ -1,0 +1,12 @@
+.header__connect {
+  color: #2f80ed;
+  text-decoration: none;
+  opacity: 1;
+  transition: opacity 0.8s, linear 0.3s;
+}
+.header__connect:hover {
+  color: #2f80ed;
+  text-decoration: none;
+  opacity: 0.5;
+  transition: opacity 0.8s, linear 0.3s;
+}

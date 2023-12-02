@@ -1,0 +1,19 @@
+.footer__link-adaptive {
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 112%;
+  color: #ffffff;
+  text-decoration: none;
+  margin: 0;
+}
+.footer__link-adaptive:hover {
+  opacity: 0.8;
+}
+@media screen and (max-width: 767px) {
+  .footer__link-adaptive {
+    font-size: 24px;
+    line-height: 100%;
+  }
+}
