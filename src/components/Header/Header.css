@@ -116,6 +116,7 @@
 }
 
 .header__components {
+  text-decoration: none;
   display: flex;
   flex-direction: row;
   flex-shrink: 0;
