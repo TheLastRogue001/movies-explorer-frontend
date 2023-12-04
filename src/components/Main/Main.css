@@ -5,6 +5,25 @@
   padding: 110px 70px 204px;
 }
 
+.content {
+  overflow-y: auto;
+}
+
+.student__title {
+  display: flex;
+  max-width: 1140px;
+  color: #fff;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.88px;
+  padding-bottom: 23px;
+  border-bottom: 1px solid #dadada;
+  margin: 0 auto;
+}
+
 @media screen and (max-width: 768px) {
   .student {
     padding: 90px 50px 169px;
@@ -14,5 +33,11 @@
 @media screen and (max-width: 500px) {
   .student {
     padding: 70px 14px 149px;
+  }
+
+  .student__title {
+    font-size: 18px;
+    letter-spacing: -0.72px;
+    padding-bottom: 28px;
   }
 }

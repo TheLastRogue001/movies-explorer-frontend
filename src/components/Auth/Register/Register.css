@@ -4,7 +4,6 @@
   flex-direction: column;
   margin: 70px auto 0;
   width: 396px;
-  height: 100vh;
 }
 
 .register__img {
@@ -66,7 +65,7 @@
   align-items: end;
 }
 
-.register__container {
+.register__info {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -118,6 +117,12 @@
   opacity: 0.7;
   transition: opacity 0.5s, visibility 0s linear;
 }
+.register__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
 
 .register__form {
   width: 100%;
@@ -163,6 +168,9 @@
   }
   .register__components {
     margin-bottom: 157px;
+  }
+  .register__container {
+    align-items: center;
   }
   .register__title {
     margin: 50px 0 80px;

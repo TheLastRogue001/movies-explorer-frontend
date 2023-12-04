@@ -15,9 +15,10 @@
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.88px;
-  padding-bottom: 23px;
   border-bottom: 1px solid #dadada;
-  margin: 0 auto;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 23px;
 }
 
 .project__container {
@@ -35,7 +36,7 @@
   row-gap: 26px;
 }
 
-.project__h3 {
+.project__label {
   text-align: left;
   max-width: 550px;
   color: #fff;
@@ -83,6 +84,14 @@
   flex-shrink: 0;
   width: 100%;
   background: #3ddc84;
+  color: #000;
+  text-align: center;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0;
 }
 
 .project__front-end {
@@ -108,10 +117,10 @@
   font-weight: 400;
   line-height: normal;
   background: #303030;
+  margin: 0;
 }
 
 .project__info {
-  margin-top: 14px;
   max-width: 200px;
   color: #8b8b8b;
   text-align: center;
@@ -120,6 +129,8 @@
   font-style: normal;
   font-weight: 500;
   line-height: 17px;
+  margin: 0;
+  margin-top: 14px;
 }
 
 @media screen and (max-width: 768px) {
@@ -148,6 +159,8 @@
   }
   .project__title {
     padding-bottom: 28px;
+    letter-spacing: -0.72px;
+    font-size: 18px;
   }
   .project__h3 {
     font-size: 18px;

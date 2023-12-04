@@ -24,63 +24,75 @@ function Register() {
 
   return (
     <main className="register">
-      <Link className="register__main" to="/">
-        <img className="register__img" src={Logo} alt="Логотип" />
-      </Link>
-      <h1 className="register__title">Добро пожаловать!</h1>
-      <form className="register__form" name="register">
-        <div className="register__components">
-          <div className="register__container">
-            <label className="register__label">Имя</label>
-            <input
-              id="name"
-              type="text"
-              name="name"
-              required
-              placeholder="Имя"
-              onChange={handleChange}
-              value={formValue.name}
-              className="register__input"
-            ></input>
-            <span className="register__input-error"></span>
+      <section className="register__container">
+        <Link className="register__main" to="/">
+          <img className="register__img" src={Logo} alt="Логотип" />
+        </Link>
+        <h1 className="register__title">Добро пожаловать!</h1>
+        <form className="register__form" name="register">
+          <div className="register__components">
+            <div className="register__info">
+              <label className="register__label">Имя</label>
+              <input
+                id="name"
+                type="text"
+                name="name"
+                required
+                min-length="2"
+                max-length="40"
+                placeholder="Имя"
+                onChange={handleChange}
+                value={formValue.name}
+                className="register__input"
+              ></input>
+              <span className="register__input-error"></span>
+            </div>
+            <div className="register__info">
+              <label className="register__label">E-mail</label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                required
+                min-length="2"
+                max-length="40"
+                placeholder="E-mail"
+                onChange={handleChange}
+                value={formValue.email}
+                className="register__input"
+              ></input>
+              <span className="register__input-error"></span>
+            </div>
+            <div className="register__info">
+              <label className="register__label">Пароль</label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                required
+                min-length="2"
+                max-length="40"
+                placeholder="Пароль"
+                onChange={handleChange}
+                value={formValue.password}
+                className="register__input"
+              ></input>
+              <span className="register__input-error">
+                Что-то пошло не так...
+              </span>
+            </div>
           </div>
-          <div className="register__container">
-            <label className="register__label">E-mail</label>
-            <input
-              id="email"
-              type="email"
-              name="email"
-              required
-              placeholder="E-mail"
-              onChange={handleChange}
-              value={formValue.email}
-              className="register__input"
-            ></input>
-            <span className="register__input-error"></span>
+          <button type="submit" className="register__button">
+            Зарегистрироваться
+          </button>
+          <div className="register__signup">
+            <p className="register__p">Уже зарегистрированы?</p>
+            <Link to="/signin" className="register__link">
+              Войти
+            </Link>
           </div>
-          <div className="register__container">
-            <label className="register__label">Пароль</label>
-            <input
-              id="password"
-              type="password"
-              name="password"
-              required
-              placeholder="Пароль"
-              onChange={handleChange}
-              value={formValue.password}
-              className="register__input"
-            ></input>
-            <span className="register__input-error">Что-то пошло не так...</span>
-          </div>
-        </div>
-        <button type="submit" className="register__button">Зарегистрироваться</button>
-        <div className="register__signup">
-          <p className="register__p">Уже зарегистрированы?</p>
-          <Link to="/signin" className="register__link">
-            Войти
-          </Link>
-        </div>
-      </form>
+        </form>
+      </section>
     </main>
   );
 }

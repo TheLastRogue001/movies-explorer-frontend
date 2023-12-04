@@ -11,6 +11,12 @@
   margin: 0 70px 60px;
 }
 
+.movies__container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 @media screen and (max-width: 1278px) {
   .movies__cards {
     justify-content: center;

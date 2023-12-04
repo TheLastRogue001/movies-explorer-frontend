@@ -22,9 +22,7 @@
   border-radius: 40px;
   background: #2f2f2f;
 }
-.movies__input:focus {
-  outline: none;
-}
+
 .movies__button-arrow {
   cursor: pointer;
   position: absolute;

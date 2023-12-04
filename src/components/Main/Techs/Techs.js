@@ -5,7 +5,7 @@ const Techs = () => {
     <section id="tehnology" className="tehnology">
       <h2 className="tehnology__title">Технологии</h2>
       <div className="tehnology__text">
-        <h2 className="tehnology__h2">7 технологий</h2>
+        <h3 className="tehnology__h3">7 технологий</h3>
         <p className="tehnology__p">
           На курсе веб-разработки мы освоили технологии, которые применили в
           дипломном проекте.

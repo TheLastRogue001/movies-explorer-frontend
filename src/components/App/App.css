@@ -2,8 +2,9 @@
   padding: 0;
   margin: 0;
   font-family: "Inter", Arial, Helvetica, sans-serif;
-  background: #272727;
+  background: #202020;
   min-width: 320px;
+  height: 100vh;
 }
 
 .layout {
@@ -11,6 +12,9 @@
   flex-direction: column;
   max-width: 1280px;
   margin: 0 auto;
-  background: #202020;
-  flex-flow: column;
+  max-height: 100vh;
+}
+
+.layout__container {
+  overflow-y: auto;
 }

@@ -1,7 +1,6 @@
 .profile {
   background: #202020;
   padding-top: 74px;
-  height: calc(100vh - 74px);
 }
 .profile__container {
   display: flex;

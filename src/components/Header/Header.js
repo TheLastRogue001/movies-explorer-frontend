@@ -25,7 +25,6 @@ const getHeader = (onNavigationClick) => {
         className="header__checkbox"
         type="checkbox"
         name="menu"
-        placeholder="Меню"
         id="info-header"
         onClick={onNavigationClick}
       />

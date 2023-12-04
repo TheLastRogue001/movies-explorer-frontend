@@ -2,7 +2,7 @@ import "./MoviesCardList.css";
 
 const MoviesCardList = ({ children }) => {
   return (
-    <section>
+    <section className="movies__container">
       <ul className="movies__cards">{children}</ul>
     </section>
   );

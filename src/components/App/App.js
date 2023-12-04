@@ -35,20 +35,22 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <div className="layout">
-          <Header onNavigationClick={handleNavigationClick} />
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/movies" element={<Movies />} />
-            <Route path="/saved-movies" element={<SavedMovies />} />
-            <Route path="/adaptive" element={<Adaptive />} />
-            <Route path="/static" element={<Static />} />
-            <Route path="/signup" element={<Register />} />
-            <Route path="/signin" element={<Login />} />
-            <Route path="/*" element={<NotFoundPage />} />
-          </Routes>
-          <Footer />
-          <Navigation isOpen={isNavigationPopupOpen} onClose={closePopup} />
+          <div className="layout__container">
+            <Header onNavigationClick={handleNavigationClick} />
+            <Routes>
+              <Route path="/" element={<Main />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/movies" element={<Movies />} />
+              <Route path="/saved-movies" element={<SavedMovies />} />
+              <Route path="/adaptive" element={<Adaptive />} />
+              <Route path="/static" element={<Static />} />
+              <Route path="/signup" element={<Register />} />
+              <Route path="/signin" element={<Login />} />
+              <Route path="/*" element={<NotFoundPage />} />
+            </Routes>
+            <Footer />
+            <Navigation isOpen={isNavigationPopupOpen} onClose={closePopup} />
+          </div>
         </div>
       </div>
     </CurrentUserContext.Provider>

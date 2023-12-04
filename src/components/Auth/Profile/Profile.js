@@ -49,6 +49,8 @@ function Profile() {
           <input
             disabled={disabled}
             placeholder="Алекс"
+            min-length="2"
+            max-length="40"
             onChange={() => {}}
             className="profile__input"
           />
@@ -58,6 +60,8 @@ function Profile() {
           <input
             disabled={disabled}
             placeholder="sasha0908@mail.ru"
+            min-length="2"
+            max-length="40"
             onChange={() => {}}
             className="profile__input"
           />

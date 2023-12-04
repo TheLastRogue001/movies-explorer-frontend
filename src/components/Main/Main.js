@@ -13,6 +13,7 @@ const Main = () => {
       <AboutProject />
       <Techs />
       <section id="student" className="student">
+        <h2 className="student__title">Студент</h2>
         <AboutMe />
         <Portfolio />
       </section>

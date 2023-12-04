@@ -9,7 +9,6 @@ const FilterCheckbox = ({ isOn, handleToggle }) => {
         onChange={handleToggle}
         className="movies__checkbox"
         id="movies__checkbox"
-        placeholder="Радио кнопка"
         type="checkbox"
       />
       <label
