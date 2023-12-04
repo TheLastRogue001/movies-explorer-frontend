@@ -3,14 +3,16 @@
   justify-content: center;
   align-items: center;
   column-gap: 40px;
-  margin: 24px auto;
+  padding: 24px 0;
   flex-shrink: 0;
   background: #272727;
+  list-style-type: none;
+  margin: 0;
 }
 
 .praktikum__link {
   color: #fff;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 13px;
   font-style: normal;
   font-weight: 500;
@@ -28,7 +30,7 @@
 @media screen and (max-width: 500px) {
   .praktikum__links {
     column-gap: 24px;
-    margin: 24px 53px;
+    padding: 24px 53px;
     flex-shrink: 0;
     background: #272727;
   }

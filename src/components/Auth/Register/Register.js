@@ -11,26 +11,38 @@ function Register() {
     password: "",
   });
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormValue({
+      ...formValue,
+      [name]: value,
+    });
+  };
+
   const navigate = useNavigate();
 
   return (
-    <div className="register">
+    <main className="register">
       <Link className="register__main" to="/">
-        <img className="register__img" src={Logo} alt="Logo" />
+        <img className="register__img" src={Logo} alt="Логотип" />
       </Link>
-      <label className="register__title">Добро пожаловать!</label>
+      <h1 className="register__title">Добро пожаловать!</h1>
       <form className="register__form" name="register">
         <div className="register__components">
           <div className="register__container">
             <label className="register__label">Имя</label>
             <input
               id="name"
-              type="name"
+              type="text"
               name="name"
-              onChange={() => {}}
+              required
+              placeholder="Имя"
+              onChange={handleChange}
               value={formValue.name}
               className="register__input"
             ></input>
+            <span className="register__input-error"></span>
           </div>
           <div className="register__container">
             <label className="register__label">E-mail</label>
@@ -38,10 +50,13 @@ function Register() {
               id="email"
               type="email"
               name="email"
-              onChange={() => {}}
+              required
+              placeholder="E-mail"
+              onChange={handleChange}
               value={formValue.email}
               className="register__input"
             ></input>
+            <span className="register__input-error"></span>
           </div>
           <div className="register__container">
             <label className="register__label">Пароль</label>
@@ -49,13 +64,16 @@ function Register() {
               id="password"
               type="password"
               name="password"
-              onChange={() => {}}
+              required
+              placeholder="Пароль"
+              onChange={handleChange}
               value={formValue.password}
               className="register__input"
             ></input>
+            <span className="register__input-error">Что-то пошло не так...</span>
           </div>
         </div>
-        <button className="register__button">Зарегистрироваться</button>
+        <button type="submit" className="register__button">Зарегистрироваться</button>
         <div className="register__signup">
           <p className="register__p">Уже зарегистрированы?</p>
           <Link to="/signin" className="register__link">
@@ -63,7 +81,7 @@ function Register() {
           </Link>
         </div>
       </form>
-    </div>
+    </main>
   );
 }
 

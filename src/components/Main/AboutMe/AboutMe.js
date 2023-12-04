@@ -18,11 +18,12 @@ const AboutMe = () => {
           <a
             href="https://github.com/TheLastRogue001"
             className="student__github"
+            target="_blank"
           >
             Github
           </a>
         </div>
-        <img className="student__img" src={Student} alt="Student" />
+        <img className="student__img" src={Student} alt="Студент" />
       </div>
     </div>
   );

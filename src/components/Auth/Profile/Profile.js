@@ -10,6 +10,7 @@ function Profile() {
       return (
         <div className="profile__buttons profile__buttons-save">
           <button
+            type="submit"
             onClick={() => {
               setDisabled(true);
             }}
@@ -24,6 +25,7 @@ function Profile() {
       return (
         <div className="profile__buttons">
           <button
+            type="button"
             onClick={() => {
               setDisabled(false);
             }}
@@ -31,14 +33,16 @@ function Profile() {
           >
             Редактировать
           </button>
-          <button className="profile__exit">Выйти из аккаунта</button>
+          <Link to="/signin" className="profile__exit">
+            Выйти из аккаунта
+          </Link>
         </div>
       );
     }
   };
   return (
-    <div className="profile">
-      <div className="profile__container">
+    <main className="profile">
+      <section className="profile__container">
         <h1 className="profile__title">Привет, {name}!</h1>
         <div className="profile__name">
           <label className="profile__caption">Имя</label>
@@ -59,8 +63,8 @@ function Profile() {
           />
         </div>
         {getButtons()}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 

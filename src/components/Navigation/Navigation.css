@@ -7,7 +7,6 @@
   align-items: flex-start;
   justify-content: right;
   width: 100%;
-  height: 100%;
   pointer-events: all;
   z-index: 1;
   overflow: auto;
@@ -95,7 +94,7 @@
   color: #fff;
   text-align: center;
   font-feature-settings: "clig" off, "liga" off;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
@@ -108,6 +107,7 @@
 }
 
 .popup__profile {
+  text-decoration: none;
   display: flex;
   flex-direction: row;
   flex-shrink: 0;
@@ -126,7 +126,7 @@
 .popup__profile-title {
   color: #fff;
   font-feature-settings: "clig" off, "liga" off;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 13px;
   font-style: normal;
   font-weight: 500;
@@ -151,4 +151,14 @@
   width: 10.383px;
   height: 10.669px;
   flex-shrink: 0;
+}
+
+@media screen and (max-width: 500px) {
+  .popup__links {
+    margin-top: 122px;
+    row-gap: 24px;
+  }
+  .popup__profile {
+    margin-bottom: 40px;
+  }
 }

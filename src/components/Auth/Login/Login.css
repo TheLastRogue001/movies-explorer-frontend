@@ -2,8 +2,9 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  margin: 70px auto;
+  margin: 70px auto 0;
   width: 396px;
+  height: 100vh;
 }
 .sign__img {
   width: 38px;
@@ -32,7 +33,7 @@
 }
 .sign__label {
   color: #8b8b8b;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 10px;
   font-style: normal;
   font-weight: 400;
@@ -66,16 +67,15 @@
 }
 .sign__components {
   display: flex;
-  row-gap: 20px;
   flex-direction: column;
-  margin-bottom: 179px;
+  margin-bottom: 159px;
   width: 100%;
 }
 .sign__link {
   text-decoration: none;
   color: #4285f4;
   text-align: center;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -88,6 +88,7 @@
   transition: opacity 0.5s, visibility 0s linear;
 }
 .sign__button {
+  cursor: pointer;
   width: 100%;
   height: 45px;
   border: 0;
@@ -96,9 +97,9 @@
   color: #fff;
   text-align: center;
   font-family: "Inter", Arial, Helvetica, sans-serif;
-  font-size: 18px;
+  font-size: 14px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   line-height: normal;
   opacity: 1;
   transition: opacity 0.5s, visibility 0s linear;
@@ -122,14 +123,48 @@
   margin-top: 16px;
 }
 
+.sign__input-error {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #ff0000;
+  margin: 0;
+  min-height: 10px;
+}
+
 @media screen and (max-width: 768px) {
   .sign {
-    margin: 232px auto;
+    margin: 232px auto 0;
   }
 }
 
 @media screen and (max-width: 458px) {
   .sign {
     width: 258px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 56px auto 0;
+  }
+  .sign__title {
+    margin: 50px 0 80px;
+  }
+  .sign__button {
+    font-size: 12px;
+  }
+  .sign__p {
+    font-size: 12px;
+    margin-top: 14px;
+  }
+  .sign__link {
+    font-size: 12px;
+  }
+  .sign__components {
+    margin-bottom: 247px;
   }
 }

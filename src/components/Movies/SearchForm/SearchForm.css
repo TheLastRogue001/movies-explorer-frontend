@@ -12,7 +12,7 @@
   height: 18px;
   color: #8b8b8b;
   font-feature-settings: "clig" off, "liga" off;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 13px;
   font-style: normal;
   font-weight: 400;
@@ -36,6 +36,12 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
+  opacity: 1;
+  transition: opacity 0.5s, visibility 0s linear;
+}
+.movies__button-arrow:hover {
+  opacity: 0.7;
+  transition: opacity 0.5s, visibility 0s linear;
 }
 
 @media screen and (max-width: 1279px) {
@@ -49,9 +55,9 @@
 
 @media screen and (max-width: 500px) {
   .movies__input {
-    margin: 0 20px;
+    margin: 0 14px;
   }
   .movies__button-arrow {
-    margin-right: 20px;
+    margin-right: 14px;
   }
 }

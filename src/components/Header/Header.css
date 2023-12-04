@@ -9,14 +9,14 @@
   margin: 0 auto;
 }
 
-.header__movies {
+.header_movies {
   background: #202020;
 }
 
 .header__link {
   color: #fff;
   text-align: right;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 13px;
   font-style: normal;
   font-weight: 500;
@@ -47,7 +47,7 @@
   border: none;
   color: #a9a9a9;
   text-align: right;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
@@ -58,7 +58,7 @@
 .header__h2-profile {
   color: #fff;
   font-feature-settings: "clig" off, "liga" off;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 13px;
   font-style: normal;
   font-weight: 500;
@@ -124,12 +124,6 @@
   align-items: center;
   margin: 21px 70px 21px 0;
   padding-left: 11px;
-  opacity: 1;
-  transition: opacity 0.5s, visibility 0s linear;
-}
-.header__components:hover {
-  opacity: 0.7;
-  transition: opacity 0.5s, visibility 0s linear;
 }
 
 .header__components-profile {
@@ -154,23 +148,35 @@
   border-radius: 3px;
   background: #3ddc84;
   color: #000;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
   line-height: 16px;
   text-decoration: none;
+  opacity: 1;
+  transition: opacity 0.5s, visibility 0s linear;
+}
+.header__signin:hover {
+  opacity: 0.7;
+  transition: opacity 0.5s, visibility 0s linear;
 }
 
 .header__signup {
   text-decoration: none;
   color: #fff;
   text-align: right;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
   line-height: 16px;
+  opacity: 1;
+  transition: opacity 0.5s, visibility 0s linear;
+}
+.header__signup:hover {
+  opacity: 0.7;
+  transition: opacity 0.5s, visibility 0s linear;
 }
 
 @media screen and (max-width: 1278px) {
@@ -195,13 +201,13 @@
   }
 
   .header__logo {
-    margin: 18px 0 0 30px;
+    margin: 18px 0 18px 30px;
     width: 38px;
   }
 
   .header__menu {
     display: inline-block;
-    margin: 15px 25px 15px 0;
+    margin: 15px 30px 0 0;
   }
 
   .header__components-profile {
@@ -224,7 +230,7 @@
     border-radius: 3px;
     background: #3ddc84;
     color: #000;
-    font-family: Inter;
+    font-family: "Inter", Arial, Helvetica, sans-serif;
     font-size: 10px;
     font-style: normal;
     font-weight: 500;
@@ -238,7 +244,7 @@
 
   .header__menu {
     display: inline-block;
-    margin: 18px 0 21px 0;
+    margin: 15px 14px 16px 0;
   }
 
   .header__signup {

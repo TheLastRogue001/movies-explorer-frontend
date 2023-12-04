@@ -11,12 +11,14 @@ function Movies() {
   const [short, setShort] = useState(false);
 
   return (
-    <div className="movies">
-      <SearchForm />
-      <div className="movies__switch">
-        <FilterCheckbox isOn={short} handleToggle={() => setShort(!short)} />
-        <h3 className="movies__h3">Короткометражки</h3>
-      </div>
+    <main className="movies">
+      <form className="movies__form" name="search">
+        <SearchForm />
+        <div className="movies__switch">
+          <FilterCheckbox isOn={short} handleToggle={() => setShort(!short)} />
+          <h3 className="movies__h3">Короткометражки</h3>
+        </div>
+      </form>
       <MoviesCardList>
         <MoviesCard Movie={Movie} />
         <MoviesCard isLiked={true} Movie={BlackMovie} />
@@ -27,11 +29,22 @@ function Movies() {
         <MoviesCard Movie={Movie} />
         <MoviesCard isLiked={true} Movie={BlackMovie} />
         <MoviesCard Movie={StoryMovie} />
+        <MoviesCard Movie={Movie} />
+        <MoviesCard isLiked={true} Movie={BlackMovie} />
+        <MoviesCard Movie={StoryMovie} />
+        <MoviesCard Movie={Movie} />
+        <MoviesCard isLiked={true} Movie={BlackMovie} />
+        <MoviesCard Movie={StoryMovie} />
+        <MoviesCard Movie={Movie} />
+        <MoviesCard isLiked={true} Movie={BlackMovie} />
+        <MoviesCard Movie={StoryMovie} />
       </MoviesCardList>
-      <div className="movies__continue">
-        <button className="movies__next">Ещё</button>
-      </div>
-    </div>
+      <section className="movies__continue">
+        <button type="button" className="movies__next">
+          Ещё
+        </button>
+      </section>
+    </main>
   );
 }
 

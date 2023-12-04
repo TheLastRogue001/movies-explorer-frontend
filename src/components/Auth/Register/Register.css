@@ -2,8 +2,9 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  margin: 70px auto;
+  margin: 70px auto 0;
   width: 396px;
+  height: 100vh;
 }
 
 .register__img {
@@ -36,7 +37,7 @@
 
 .register__label {
   color: #8b8b8b;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 10px;
   font-style: normal;
   font-weight: 400;
@@ -74,9 +75,8 @@
 
 .register__components {
   display: flex;
-  row-gap: 20px;
   flex-direction: column;
-  margin-bottom: 91px;
+  margin-bottom: 69px;
   width: 100%;
 }
 
@@ -84,7 +84,7 @@
   text-decoration: none;
   color: #4285f4;
   text-align: center;
-  font-family: Inter;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -98,6 +98,7 @@
 }
 
 .register__button {
+  cursor: pointer;
   width: 100%;
   height: 45px;
   border: 0;
@@ -106,9 +107,9 @@
   color: #fff;
   text-align: center;
   font-family: "Inter", Arial, Helvetica, sans-serif;
-  font-size: 18px;
+  font-size: 14px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   line-height: normal;
   opacity: 1;
   transition: opacity 0.5s, visibility 0s linear;
@@ -134,14 +135,46 @@
   margin-top: 16px;
 }
 
+.register__input-error {
+  display: flex;
+  justify-content: flex-start;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: normal;
+  color: #ff0000;
+  margin: 0;
+  min-height: 10px;
+}
+
 @media screen and (max-width: 768px) {
   .register {
-    margin: 232px auto;
+    margin: 232px auto 0;
   }
 }
 
 @media screen and (max-width: 458px) {
   .register {
     width: 260px;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 56px auto 0;
+  }
+  .register__components {
+    margin-bottom: 157px;
+  }
+  .register__title {
+    margin: 50px 0 80px;
+  }
+  .register__button {
+    font-size: 12px;
+  }
+  .register__p {
+    font-size: 12px;
+    margin-top: 14px;
+  }
+  .register__link {
+    font-size: 12px;
   }
 }

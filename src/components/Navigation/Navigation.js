@@ -68,7 +68,7 @@ function Navigation({ isOpen, onClose }) {
         >
           <h2 className="popup__profile-title">Аккаунт</h2>
           <div className="popup__img-profile">
-            <img src={IconProfile} className="popup__img" alt="profile" />
+            <img src={IconProfile} className="popup__img" alt="Профиль" />
           </div>
         </Link>
         <button

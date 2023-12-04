@@ -19,14 +19,14 @@ const MoviesCard = ({ Movie, isLiked, remove }) => {
     );
   };
   return (
-    <div className="movies__card">
-      <img src={Movie} alt="Movie" className="movies__img" />
+    <li className="movies__card">
+      <img src={Movie} alt="Фильм" className="movies__img" />
       <div className="movies__info">
         <h2 className="movies__title">33 слова о дизайне</h2>
         <div className="movies__content">{getButton()}</div>
         <label className="movies__time">1ч 47м</label>
       </div>
-    </div>
+    </li>
   );
 };
 

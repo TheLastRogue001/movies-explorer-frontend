@@ -4,10 +4,10 @@ import "./Header.css";
 
 const getHeader = (onNavigationClick) => {
   return (
-    <header className="header header__movies">
+    <header className="header header_movies">
       <div className="header__container">
         <Link className="header__main" to="/">
-          <img className="header__logo" alt="Movies" src={Logo} />
+          <img className="header__logo" alt="Логотип" src={Logo} />
         </Link>
         <div className="header__pages">
           <Link className="header__link" to="/movies">
@@ -19,12 +19,13 @@ const getHeader = (onNavigationClick) => {
         </div>
       </div>
       <label className="header__label" htmlFor="info-header">
-        <img alt="Menu" className="header__menu" src={Menu} />
+        <img alt="Меню" className="header__menu" src={Menu} />
       </label>
       <input
         className="header__checkbox"
         type="checkbox"
         name="menu"
+        placeholder="Меню"
         id="info-header"
         onClick={onNavigationClick}
       />
@@ -36,7 +37,7 @@ const getHeader = (onNavigationClick) => {
           Аккаунт
         </h2>
         <div className="header__img-profile">
-          <img src={IconProfile} className="header__img" alt="profile" />
+          <img src={IconProfile} className="header__img" alt="Профиль" />
         </div>
       </Link>
     </header>
@@ -50,7 +51,7 @@ function Header({onNavigationClick}) {
         path="/"
         element={
           <header className="header header-main">
-            <img className="header__logo" alt="Movies" src={Logo} />
+            <img className="header__logo" alt="Логотип" src={Logo} />
             <div className="header__components">
               <Link
                 to="/signup"

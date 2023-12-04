@@ -4,7 +4,6 @@
   font-family: "Inter", Arial, Helvetica, sans-serif;
   background: #272727;
   min-width: 320px;
-  min-height: 100vh;
 }
 
 .layout {
@@ -12,4 +11,6 @@
   flex-direction: column;
   max-width: 1280px;
   margin: 0 auto;
+  background: #202020;
+  flex-flow: column;
 }

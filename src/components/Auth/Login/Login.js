@@ -10,14 +10,23 @@ function Login() {
     password: "",
   });
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormValue({
+      ...formValue,
+      [name]: value,
+    });
+  };
+
   const navigate = useNavigate();
 
   return (
-    <div className="sign">
+    <main className="sign">
       <Link className="sign__main" to="/">
-        <img className="sign__img" src={Logo} alt="Logo" />
+        <img className="sign__img" src={Logo} alt="Логотип" />
       </Link>
-      <label className="sign__title">Рады видеть!</label>
+      <h1 className="sign__title">Рады видеть!</h1>
       <form className="sign__form" name="login">
         <div className="sign__components">
           <div className="sign__container">
@@ -26,10 +35,13 @@ function Login() {
               id="email"
               type="email"
               name="email"
-              onChange={() => {}}
+              required
+              placeholder="E-mail"
+              onChange={handleChange}
               value={formValue.email}
               className="sign__input"
             ></input>
+            <span className="sign__input-error"></span>
           </div>
           <div className="sign__container">
             <label className="sign__label">Пароль</label>
@@ -37,13 +49,18 @@ function Login() {
               id="password"
               type="password"
               name="password"
-              onChange={() => {}}
+              placeholder="Пароль"
+              required
+              onChange={handleChange}
               value={formValue.password}
               className="sign__input"
             ></input>
+            <span className="sign__input-error"></span>
           </div>
         </div>
-        <button className="sign__button">Войти</button>
+        <button type="submit" className="sign__button">
+          Войти
+        </button>
         <div className="sign__register">
           <p className="sign__p">Ещё не зарегистрированы?</p>
           <Link to="/signup" className="sign__link">
@@ -51,7 +68,7 @@ function Login() {
           </Link>
         </div>
       </form>
-    </div>
+    </main>
   );
 }
 

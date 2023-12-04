@@ -4,9 +4,9 @@ import "./SearchForm.css";
 const SearchForm = () => {
   return (
     <div className="movies__search">
-      <input placeholder="Фильм" className="movies__input" />
-      <button className="movies__button-arrow">
-        <img src={RightArrow} />
+      <input required placeholder="Фильм" className="movies__input" />
+      <button type="submit" className="movies__button-arrow">
+        <img alt="Стрелка" src={RightArrow} />
       </button>
     </div>
   );
