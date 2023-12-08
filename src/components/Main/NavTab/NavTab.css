@@ -1,0 +1,40 @@
+.praktikum__links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 40px;
+  padding: 24px 0;
+  flex-shrink: 0;
+  background: #272727;
+  list-style-type: none;
+  margin: 0;
+}
+
+.praktikum__link {
+  color: #fff;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  text-decoration-line: underline;
+  opacity: 1;
+  transition: opacity 0.5s, visibility 0s linear;
+}
+
+.praktikum__link:hover {
+  opacity: 0.7;
+  transition: opacity 0.5s, visibility 0s linear;
+}
+
+@media screen and (max-width: 500px) {
+  .praktikum__links {
+    column-gap: 24px;
+    padding: 24px 53px;
+    flex-shrink: 0;
+    background: #272727;
+  }
+  .praktikum__link {
+    font-size: 11px;
+  }
+}

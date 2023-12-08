@@ -1,0 +1,10 @@
+.lead {
+  display: grid;
+  justify-items: center;
+  grid-template-columns: minmax(320px, auto);
+}
+@media screen and (max-width: 767px) {
+  .lead {
+    justify-items: start;
+  }
+}

@@ -1,0 +1,25 @@
+.page {
+  padding: 0;
+  margin: 0;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  background: #202020;
+  min-width: 320px;
+  height: 100vh;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  max-width: 1280px;
+  margin: 0 auto;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.layout__container {
+  overflow-y: scroll;
+  height: 100%;
+  padding-right: 17px;
+  box-sizing: content-box;
+  width: 100%;
+}

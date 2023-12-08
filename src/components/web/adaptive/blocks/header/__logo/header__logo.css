@@ -1,0 +1,16 @@
+.header__logo-adaptive {
+  display: flex;
+  align-self: start;
+  max-width: 100%;
+  min-width: 142px;
+}
+@media screen and (max-width: 1023px) {
+  .header__logo-adaptive {
+    max-width: 176px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .header__logo-adaptive {
+    max-width: 142px;
+  }
+}

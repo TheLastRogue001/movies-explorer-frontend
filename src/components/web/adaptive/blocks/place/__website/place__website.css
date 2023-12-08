@@ -1,0 +1,21 @@
+.place__website {
+  justify-self: start;
+  align-self: end;
+  margin: 0;
+  margin-bottom: 8px;
+}
+@media screen and (max-width: 1279px) {
+  .place__website {
+    margin-bottom: 16px;
+  }
+}
+@media screen and (max-width: 1023px) {
+  .place__website {
+    margin-bottom: 20px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .place__website {
+    margin: 0 1rem 2rem;
+  }
+}

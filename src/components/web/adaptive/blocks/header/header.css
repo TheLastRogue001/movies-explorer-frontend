@@ -1,0 +1,21 @@
+.header-adaptive {
+  grid-area: header;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  margin: 1.75rem 2.4rem 2.8rem;
+}
+@media screen and (max-width: 1279px) {
+  .header-adaptive {
+    margin: 1.75rem 3rem 3rem;
+  }
+}
+@media screen and (max-width: 1023px) {
+  .header-adaptive {
+    margin: 1.75rem 1.5rem 3rem;
+  }
+}
+@media screen and (max-width: 767px) {
+  .header-adaptive {
+    margin: 1rem 1rem 3rem;
+  }
+}

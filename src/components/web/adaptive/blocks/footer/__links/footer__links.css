@@ -1,0 +1,14 @@
+.footer__links-adaptive {
+  display: flex;
+  flex-direction: row;
+  grid-gap: 1.125rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+@media screen and (max-width: 767px) {
+  .footer__links-adaptive {
+    flex-direction: column;
+    grid-gap: 2rem;
+  }
+}
