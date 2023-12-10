@@ -1,10 +1,36 @@
-import { useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 import "./Profile.css";
 
-function Profile() {
-  const [name, setName] = useState("Алекс");
+function Profile({ onExitClick, onUpdateUser }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [disabled, setDisabled] = useState(true);
+  const currentUser = useContext(CurrentUserContext);
+
+  useEffect(() => {
+    setName(currentUser?.name);
+    setEmail(currentUser?.email);
+  }, [currentUser]);
+
+  const handleSetName = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleSetEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    onUpdateUser({
+      name,
+      email,
+    });
+  };
+
   const getButtons = () => {
     if (!disabled) {
       return (
@@ -33,7 +59,7 @@ function Profile() {
           >
             Редактировать
           </button>
-          <Link to="/signin" className="profile__exit">
+          <Link to="/signin" onClick={onExitClick} className="profile__exit">
             Выйти из аккаунта
           </Link>
         </div>
@@ -43,30 +69,32 @@ function Profile() {
   return (
     <main className="profile">
       <section className="profile__container">
-        <h1 className="profile__title">Привет, {name}!</h1>
-        <div className="profile__name">
-          <label className="profile__caption">Имя</label>
-          <input
-            disabled={disabled}
-            placeholder="Алекс"
-            min-length="2"
-            max-length="40"
-            onChange={() => {}}
-            className="profile__input"
-          />
-        </div>
-        <div className="profile__email">
-          <label className="profile__caption">E-mail</label>
-          <input
-            disabled={disabled}
-            placeholder="sasha0908@mail.ru"
-            min-length="2"
-            max-length="40"
-            onChange={() => {}}
-            className="profile__input"
-          />
-        </div>
-        {getButtons()}
+        <form className="profile__form" onSubmit={handleSubmit} name="edit">
+          <h1 className="profile__title">Привет, {currentUser?.name}!</h1>
+          <div className="profile__name">
+            <label className="profile__caption">Имя</label>
+            <input
+              disabled={disabled}
+              placeholder={name}
+              min-length="2"
+              max-length="40"
+              onChange={handleSetName}
+              className="profile__input"
+            />
+          </div>
+          <div className="profile__email">
+            <label className="profile__caption">E-mail</label>
+            <input
+              disabled={disabled}
+              placeholder={email}
+              min-length="2"
+              max-length="40"
+              onChange={handleSetEmail}
+              className="profile__input"
+            />
+          </div>
+          {getButtons()}
+        </form>
       </section>
     </main>
   );

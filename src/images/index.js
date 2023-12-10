@@ -1,3 +1,5 @@
+import FalseImg from "./FalseImg.svg";
+import TrueImg from "./TrueImg.svg";
 import Arrow from "./arrow.svg";
 import BlackMovie from "./black-movie.svg";
 import IconPraktikum from "./icon-praktikum.svg";
@@ -12,13 +14,15 @@ import StoryMovie from "./story-movie.svg";
 
 export {
     Arrow,
-    BlackMovie,
-    IconPraktikum,
+    BlackMovie, FalseImg, IconPraktikum,
     IconProfile,
     Logo,
     MeAvatar,
     Menu,
-    Movie, RemoveMovie, RightArrow,
-    StoryMovie
+    Movie,
+    RemoveMovie,
+    RightArrow,
+    StoryMovie,
+    TrueImg
 };
 

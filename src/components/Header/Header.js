@@ -6,7 +6,13 @@ const getHeader = (onNavigationClick) => {
   return (
     <header className="header header_movies">
       <div className="header__container">
-        <Link className="header__main" to="/">
+        <Link
+          className="header__main"
+          onClick={() => {
+            localStorage.removeItem("jwt");
+          }}
+          to="/"
+        >
           <img className="header__logo" alt="Логотип" src={Logo} />
         </Link>
         <div className="header__pages">
@@ -32,9 +38,7 @@ const getHeader = (onNavigationClick) => {
         to="/profile"
         className="header__components header__components-profile"
       >
-        <h2 className="header__h2 header__h2-profile">
-          Аккаунт
-        </h2>
+        <h2 className="header__h2 header__h2-profile">Аккаунт</h2>
         <div className="header__img-profile">
           <img src={IconProfile} className="header__img" alt="Профиль" />
         </div>
@@ -43,7 +47,7 @@ const getHeader = (onNavigationClick) => {
   );
 };
 
-function Header({onNavigationClick}) {
+function Header({ onNavigationClick }) {
   return (
     <Routes>
       <Route

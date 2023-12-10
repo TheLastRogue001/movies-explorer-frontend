@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "../../../images";
 import "./Register.css";
-// import * as auth from "../utils/auth";
+import * as auth from "../../../utils/MainApi";
 
-function Register() {
+function Register({ onInfoAuth }) {
   const [formValue, setFormValue] = useState({
     name: "",
     email: "",
@@ -20,6 +20,21 @@ function Register() {
     });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formValue.password) {
+      auth
+        .register(formValue.name, formValue.email, formValue.password)
+        .then((res) => {
+          onInfoAuth(true);
+          navigate("/signin", { replace: true });
+        })
+        .catch((err) => {
+          if (err) onInfoAuth(false);
+        });
+    }
+  };
+
   const navigate = useNavigate();
 
   return (
@@ -29,7 +44,11 @@ function Register() {
           <img className="register__img" src={Logo} alt="Логотип" />
         </Link>
         <h1 className="register__title">Добро пожаловать!</h1>
-        <form className="register__form" name="register">
+        <form
+          className="register__form"
+          onSubmit={handleSubmit}
+          name="register"
+        >
           <div className="register__components">
             <div className="register__info">
               <label className="register__label">Имя</label>
@@ -77,12 +96,14 @@ function Register() {
                 value={formValue.password}
                 className="register__input"
               ></input>
-              <span className="register__input-error">
-                Что-то пошло не так...
-              </span>
+              <span className="register__input-error"></span>
             </div>
           </div>
-          <button type="submit" className="register__button">
+          <button
+            onClick={handleSubmit}
+            type="submit"
+            className="register__button"
+          >
             Зарегистрироваться
           </button>
           <div className="register__signup">

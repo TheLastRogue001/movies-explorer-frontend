@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "../../../images";
 import "./Login.css";
-// import * as auth from "../utils/auth";
+import * as auth from "../../../utils/MainApi";
 
-function Login() {
+function Login({ onInfoAuth, handleLogin }) {
   const [formValue, setFormValue] = useState({
     email: "",
     password: "",
@@ -19,6 +19,25 @@ function Login() {
     });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formValue.email || !formValue.password) {
+      return;
+    }
+    auth
+      .authorize(formValue.email, formValue.password)
+      .then((data) => {
+        if (data.token) {
+          setFormValue({ email: "", password: "" });
+          handleLogin(formValue.email);
+          navigate("/movies", { replace: true });
+        }
+      })
+      .catch(() => {
+        onInfoAuth(false);
+      });
+  };
+
   const navigate = useNavigate();
 
   return (
@@ -28,7 +47,7 @@ function Login() {
           <img className="sign__img" src={Logo} alt="Логотип" />
         </Link>
         <h1 className="sign__title">Рады видеть!</h1>
-        <form className="sign__form" name="login">
+        <form className="sign__form" onSubmit={handleSubmit} name="login">
           <div className="sign__components">
             <div className="sign__info">
               <label className="sign__label">E-mail</label>
@@ -63,7 +82,7 @@ function Login() {
               <span className="sign__input-error"></span>
             </div>
           </div>
-          <button type="submit" className="sign__button">
+          <button onClick={handleSubmit} type="submit" className="sign__button">
             Войти
           </button>
           <div className="sign__register">

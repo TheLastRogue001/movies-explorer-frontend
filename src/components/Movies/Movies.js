@@ -5,7 +5,6 @@ import FilterCheckbox from "./FilterCheckbox/FilterCheckbox";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import MoviesCard from "./MoviesCard/MoviesCard";
 import "./Movies.css";
-// import * as auth from "../utils/auth";
 
 function Movies() {
   const [short, setShort] = useState(false);
