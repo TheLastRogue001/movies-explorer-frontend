@@ -1,41 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "../../../images";
 import "./Login.css";
-import * as auth from "../../../utils/MainApi";
+import { apiMain } from "../../../utils/MainApi";
 
 function Login({ onInfoAuth, handleLogin }) {
-  const [formValue, setFormValue] = useState({
-    email: "",
-    password: "",
-  });
+  const [fields, setFields] = useState({});
+  const [errors, setErrors] = useState({});
+  const [isValid, setIsValid] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
+  const handleChange = (event) => {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    setFields({ ...fields, [name]: value });
+    setErrors({ ...errors, [name]: target.validationMessage });
+    setIsValid(target.closest("form").checkValidity());
   };
 
-  const handleSubmit = (e) => {
+  const resetForm = useCallback(
+    (newValues = {}, newErrors = {}, newIsValid = false) => {
+      setFields(newValues);
+      setErrors(newErrors);
+      setIsValid(newIsValid);
+    },
+    [setFields, setErrors, setIsValid]
+  );
+
+  const contactSubmit = (e) => {
     e.preventDefault();
-    if (!formValue.email || !formValue.password) {
-      return;
-    }
-    auth
-      .authorize(formValue.email, formValue.password)
+
+    apiMain
+      .authorize(fields.email, fields.password)
       .then((data) => {
         if (data.token) {
-          setFormValue({ email: "", password: "" });
-          handleLogin(formValue.email);
+          handleLogin(fields.email);
           navigate("/movies", { replace: true });
         }
       })
-      .catch(() => {
+      .catch((err) => {
         onInfoAuth(false);
       });
+    resetForm();
   };
 
   const navigate = useNavigate();
@@ -47,7 +53,12 @@ function Login({ onInfoAuth, handleLogin }) {
           <img className="sign__img" src={Logo} alt="Логотип" />
         </Link>
         <h1 className="sign__title">Рады видеть!</h1>
-        <form className="sign__form" onSubmit={handleSubmit} name="login">
+        <form
+          className="sign__form"
+          onSubmit={(e) => contactSubmit(e)}
+          name="login"
+          noValidate
+        >
           <div className="sign__components">
             <div className="sign__info">
               <label className="sign__label">E-mail</label>
@@ -59,11 +70,11 @@ function Login({ onInfoAuth, handleLogin }) {
                 min-length="2"
                 max-length="40"
                 placeholder="E-mail"
-                onChange={handleChange}
-                value={formValue.email}
+                onChange={(e) => handleChange(e)}
+                value={fields.email ?? ""}
                 className="sign__input"
               ></input>
-              <span className="sign__input-error"></span>
+              <span className="sign__input-error">{errors.email}</span>
             </div>
             <div className="sign__info">
               <label className="sign__label">Пароль</label>
@@ -75,14 +86,20 @@ function Login({ onInfoAuth, handleLogin }) {
                 max-length="40"
                 placeholder="Пароль"
                 required
-                onChange={handleChange}
-                value={formValue.password}
+                onChange={(e) => handleChange(e)}
+                value={fields.password ?? ""}
                 className="sign__input"
               ></input>
-              <span className="sign__input-error"></span>
+              <span className="sign__input-error">{errors.password}</span>
             </div>
           </div>
-          <button onClick={handleSubmit} type="submit" className="sign__button">
+          <button
+            id="submit"
+            type="submit"
+            value="Submit"
+            disabled={!isValid}
+            className="sign__button"
+          >
             Войти
           </button>
           <div className="sign__register">

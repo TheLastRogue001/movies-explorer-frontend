@@ -23,6 +23,7 @@ function Navigation({ isOpen, onClose }) {
               setIsClickMain(true);
               setIsClickMovies(false);
               setIsClickSavedMovies(false);
+              localStorage.removeItem("jwt");
               onClose();
             }}
             className={linkMain}

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { FalseImg, TrueImg } from "../../images";
-import { api } from "../../utils/MainApi";
-import * as auth from "../../utils/MainApi";
+import { apiMain } from "../../utils/MainApi";
+import { apiMovies } from "../../utils/MoviesApi";
 import Login from "../Auth/Login/Login";
 import NotFoundPage from "../Auth/NotFound/NotFoundPage";
 import Profile from "../Auth/Profile/Profile";
@@ -30,6 +30,8 @@ function App() {
   const [isSuccessInfoTooltipStatus, setIsSuccessInfoTooltipStatus] =
     useState(false);
 
+  const [movies, setMovies] = useState([]);
+
   const [loggedIn, setLoggedIn] = useState(false);
 
   const navigate = useNavigate();
@@ -39,7 +41,7 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
-      auth
+      apiMain
         .checkToken(token)
         .then((userData) => {
           setEmail(userData.email);
@@ -58,10 +60,18 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
-      api
-        .getUserProfile()
+      apiMain
+        .getUserProfile(token)
         .then((userData) => {
           setCurrentUser(userData);
+        })
+        .catch((err) => {
+          console.log(`Ошибка данных: ${err}`);
+        });
+      apiMovies
+        .getInitialMovies(token)
+        .then((initialCards) => {
+          setMovies(initialCards);
         })
         .catch((err) => {
           console.log(`Ошибка данных: ${err}`);
@@ -85,17 +95,51 @@ function App() {
   };
 
   const handleUpdateUser = ({ name, email }) => {
-    // api
-    //   .updateUserProfile(name, email)
-    //   .then((userData) => {
-    //     setCurrentUser(userData);
-    //     closeAllPopups();
-    //   })
-    //   .catch((err) => {
-    //     console.log(
-    //       `Возникла ошибка при получении данных пользователя: ${err}`
-    //     );
-    //   });
+    apiMain
+      .updateUserProfile(name, email)
+      .then((userData) => {
+        setCurrentUser(userData);
+      })
+      .catch((err) => {
+        console.log(
+          `Возникла ошибка при получении данных пользователя: ${err}`
+        );
+      });
+  };
+
+  const handleMoviesLike = (
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    thumbnail,
+    movieId,
+    nameRU,
+    nameEN
+  ) => {
+    apiMain
+      .createMovies(
+        country,
+        director,
+        duration,
+        year,
+        description,
+        image,
+        trailerLink,
+        thumbnail,
+        movieId,
+        nameRU,
+        nameEN
+      )
+      .then((newMovies) => {
+        console.log(newMovies);
+      })
+      .catch((err) => {
+        console.log(`Возникла ошибка с лайками: ${err}`);
+      });
   };
 
   const openInfoTooltip = (status) => {
@@ -122,6 +166,7 @@ function App() {
                     element={Profile}
                     loggedIn={loggedIn}
                     email={email}
+                    onInfoProfile={openInfoTooltip}
                     onUpdateUser={handleUpdateUser}
                     onExitClick={handleExitClick}
                   />
@@ -130,7 +175,12 @@ function App() {
               <Route
                 path="/movies"
                 element={
-                  <ProtectedRouteElement loggedIn={loggedIn} element={Movies} />
+                  <ProtectedRouteElement
+                    movies={movies}
+                    loggedIn={loggedIn}
+                    onMoviesLike={handleMoviesLike}
+                    element={Movies}
+                  />
                 }
               />
               <Route

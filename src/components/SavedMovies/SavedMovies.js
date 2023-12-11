@@ -19,9 +19,7 @@ function SavedMovies() {
         </div>
       </form>
       <MoviesCardList>
-        <MoviesCard remove={remove} Movie={Movie} />
-        <MoviesCard remove={remove} Movie={StoryMovie} />
-        <MoviesCard remove={remove} Movie={BlackMovie} />
+        
       </MoviesCardList>
     </main>
   );

@@ -1,7 +1,7 @@
 // export const BASE_URL = "http://localhost:3000";
 export const BASE_URL = "https://api.diplom0908.nomoredomainsmonster.ru";
 
-class Api {
+class ApiMain {
   constructor({ baseUrl }) {
     this._baseUrl = baseUrl;
   }
@@ -10,17 +10,62 @@ class Api {
     return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  getUserProfile() {
-    const token = localStorage.getItem("jwt");
+  getUserProfile(token) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => this._checkResponse(response));
+  }
+
+  deleteCard(id) {
+    const token = localStorage.getItem("jwt");
+    return fetch(`${this._baseUrl}/movies/${id}`, {
+      method: "DELETE",
       headers: {
         authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-    }).then((res) => {
-      this._checkResponse(res);
-    });
+    }).then((res) => this._checkResponse(res));
+  }
+
+  createMovies(
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    thumbnail,
+    movieId,
+    nameRU,
+    nameEN
+  ) {
+    const token = localStorage.getItem("jwt");
+    return fetch(`${this._baseUrl}/movies`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        movieId: movieId,
+        nameRU: nameRU ?? '',
+        nameEN: nameEN ?? '',
+        director: director,
+        country: country,
+        year: year,
+        duration: duration,
+        description: description,
+        trailerLink: trailerLink,
+        thumbnail: thumbnail,
+        image: image,
+      }),
+    }).then((res) => this._checkResponse(res));
   }
 
   updateUserProfile(name, email) {
@@ -37,58 +82,56 @@ class Api {
       }),
     }).then((res) => this._checkResponse(res));
   }
+
+  register(name, email, password) {
+    return fetch(`${this._baseUrl}/signup`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password,
+      }),
+    }).then((response) => this._checkResponse(response));
+  }
+
+  authorize(identifier, password) {
+    return fetch(`${this._baseUrl}/signin`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: identifier,
+        password: password,
+      }),
+    })
+      .then((response) => this._checkResponse(response))
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem("jwt", data.token);
+          return data;
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
+  checkToken = (token) => {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => this._checkResponse(response));
+  };
 }
 
-export const api = new Api({
-  baseUrl: "https://api.diplom0908.nomoredomainsmonster.ru",
+export const apiMain = new ApiMain({
+  baseUrl: BASE_URL,
 });
-
-const checkResponse = (res) => {
-  return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
-};
-
-export const register = (name, email, password) => {
-  return fetch(`${BASE_URL}/signup`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: name,
-      email: email,
-      password: password,
-    }),
-  }).then((response) => checkResponse(response));
-};
-export const authorize = (identifier, password) => {
-  return fetch(`${BASE_URL}/signin`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: identifier,
-      password: password,
-    }),
-  })
-    .then((response) => checkResponse(response))
-    .then((data) => {
-      if (data.token) {
-        localStorage.setItem("jwt", data.token);
-        return data;
-      }
-    })
-    .catch((err) => console.log(err));
-};
-export const checkToken = (token) => {
-  return fetch(`${BASE_URL}/users/me`, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((response) => checkResponse(response));
-};

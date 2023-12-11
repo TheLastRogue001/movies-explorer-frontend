@@ -1,38 +1,46 @@
-import { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "../../../images";
 import "./Register.css";
-import * as auth from "../../../utils/MainApi";
+import { apiMain } from "../../../utils/MainApi";
 
 function Register({ onInfoAuth }) {
-  const [formValue, setFormValue] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [fields, setFields] = useState({});
+  const [errors, setErrors] = useState({});
+  const [isValid, setIsValid] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
+  const handleChange = (event) => {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    setFields({ ...fields, [name]: value });
+    setErrors({ ...errors, [name]: target.validationMessage });
+    setIsValid(target.closest("form").checkValidity());
   };
 
-  const handleSubmit = (e) => {
+  const resetForm = useCallback(
+    (newValues = {}, newErrors = {}, newIsValid = false) => {
+      setFields(newValues);
+      setErrors(newErrors);
+      setIsValid(newIsValid);
+    },
+    [setFields, setErrors, setIsValid]
+  );
+
+  const contactSubmit = (e) => {
     e.preventDefault();
-    if (formValue.password) {
-      auth
-        .register(formValue.name, formValue.email, formValue.password)
+    if (fields.password) {
+      apiMain
+        .register(fields.name, fields.email, fields.password)
         .then((res) => {
           onInfoAuth(true);
           navigate("/signin", { replace: true });
         })
         .catch((err) => {
-          if (err) onInfoAuth(false);
+          onInfoAuth(false);
         });
     }
+    resetForm();
   };
 
   const navigate = useNavigate();
@@ -46,8 +54,9 @@ function Register({ onInfoAuth }) {
         <h1 className="register__title">Добро пожаловать!</h1>
         <form
           className="register__form"
-          onSubmit={handleSubmit}
+          onSubmit={(e) => contactSubmit(e)}
           name="register"
+          noValidate
         >
           <div className="register__components">
             <div className="register__info">
@@ -60,11 +69,11 @@ function Register({ onInfoAuth }) {
                 min-length="2"
                 max-length="40"
                 placeholder="Имя"
-                onChange={handleChange}
-                value={formValue.name}
+                onChange={(e) => handleChange(e)}
+                value={fields.name ?? ""}
                 className="register__input"
               ></input>
-              <span className="register__input-error"></span>
+              <span className="register__input-error">{errors.name}</span>
             </div>
             <div className="register__info">
               <label className="register__label">E-mail</label>
@@ -76,11 +85,11 @@ function Register({ onInfoAuth }) {
                 min-length="2"
                 max-length="40"
                 placeholder="E-mail"
-                onChange={handleChange}
-                value={formValue.email}
+                onChange={(e) => handleChange(e)}
+                value={fields.email ?? ""}
                 className="register__input"
               ></input>
-              <span className="register__input-error"></span>
+              <span className="register__input-error">{errors.email}</span>
             </div>
             <div className="register__info">
               <label className="register__label">Пароль</label>
@@ -89,19 +98,21 @@ function Register({ onInfoAuth }) {
                 type="password"
                 name="password"
                 required
-                min-length="2"
+                min-length="8"
                 max-length="40"
                 placeholder="Пароль"
-                onChange={handleChange}
-                value={formValue.password}
+                onChange={(e) => handleChange(e)}
+                value={fields.password ?? ""}
                 className="register__input"
               ></input>
-              <span className="register__input-error"></span>
+              <span className="register__input-error">{errors.password}</span>
             </div>
           </div>
           <button
-            onClick={handleSubmit}
+            id="submit"
             type="submit"
+            value="Submit"
+            disabled={!isValid}
             className="register__button"
           >
             Зарегистрироваться

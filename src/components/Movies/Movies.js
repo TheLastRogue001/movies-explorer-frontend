@@ -6,8 +6,11 @@ import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import MoviesCard from "./MoviesCard/MoviesCard";
 import "./Movies.css";
 
-function Movies() {
+function Movies({ movies, onMoviesLike }) {
   const [short, setShort] = useState(false);
+  const [buttonElse, setButtonElse] = useState(true);
+  let [nowMovies, setNowMovies] = useState(13);
+  let moviesLength = 0;
 
   return (
     <main className="movies">
@@ -19,29 +22,31 @@ function Movies() {
         </div>
       </form>
       <MoviesCardList>
-        <MoviesCard Movie={Movie} />
-        <MoviesCard isLiked={true} Movie={BlackMovie} />
-        <MoviesCard Movie={StoryMovie} />
-        <MoviesCard Movie={Movie} />
-        <MoviesCard isLiked={true} Movie={BlackMovie} />
-        <MoviesCard Movie={StoryMovie} />
-        <MoviesCard Movie={Movie} />
-        <MoviesCard isLiked={true} Movie={BlackMovie} />
-        <MoviesCard Movie={StoryMovie} />
-        <MoviesCard Movie={Movie} />
-        <MoviesCard isLiked={true} Movie={BlackMovie} />
-        <MoviesCard Movie={StoryMovie} />
-        <MoviesCard Movie={Movie} />
-        <MoviesCard isLiked={true} Movie={BlackMovie} />
-        <MoviesCard Movie={StoryMovie} />
-        <MoviesCard Movie={Movie} />
-        <MoviesCard isLiked={true} Movie={BlackMovie} />
-        <MoviesCard Movie={StoryMovie} />
+        {movies
+          .filter(() => {
+            ++moviesLength;
+            if (moviesLength >= nowMovies) return false;
+            return true;
+          })
+          .map((info) => (
+            <MoviesCard onMoviesLike={onMoviesLike} info={info} />
+          ))}
       </MoviesCardList>
       <section className="movies__continue">
-        <button type="button" className="movies__next">
-          Ещё
-        </button>
+        {buttonElse ? (
+          <button
+            onClick={() => {
+              if (moviesLength <= nowMovies) setButtonElse(false);
+              setNowMovies(nowMovies + 13);
+            }}
+            type="button"
+            className="movies__next"
+          >
+            Ещё
+          </button>
+        ) : (
+          <></>
+        )}
       </section>
     </main>
   );
