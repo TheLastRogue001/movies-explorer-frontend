@@ -34,7 +34,7 @@ function Login({ onInfoAuth, handleLogin }) {
       .authorize(fields.email, fields.password)
       .then((data) => {
         if (data.token) {
-          handleLogin(fields.email);
+          handleLogin();
           navigate("/movies", { replace: true });
         }
       })

@@ -30,13 +30,17 @@ function App() {
   const [isSuccessInfoTooltipStatus, setIsSuccessInfoTooltipStatus] =
     useState(false);
 
+  const [isMoviesLoaded, setIsMoviesLoaded] = useState(false);
+
   const [movies, setMovies] = useState([]);
+
+  const [savedMovies, setSavedMovies] = useState([]);
+
+  const [newMovies, setNewMovies] = useState({});
 
   const [loggedIn, setLoggedIn] = useState(false);
 
   const navigate = useNavigate();
-
-  const [email, setEmail] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -44,7 +48,6 @@ function App() {
       apiMain
         .checkToken(token)
         .then((userData) => {
-          setEmail(userData.email);
           navigate("/movies", { replace: true });
         })
         .then(() => {
@@ -68,10 +71,12 @@ function App() {
         .catch((err) => {
           console.log(`Ошибка данных: ${err}`);
         });
+      setIsMoviesLoaded(false);
       apiMovies
-        .getInitialMovies(token)
+        .getInitialMovies()
         .then((initialCards) => {
           setMovies(initialCards);
+          setIsMoviesLoaded(true);
         })
         .catch((err) => {
           console.log(`Ошибка данных: ${err}`);
@@ -89,8 +94,7 @@ function App() {
     setLoggedIn(false);
   };
 
-  const handleLogin = (email) => {
-    setEmail(email);
+  const handleLogin = () => {
     setLoggedIn(true);
   };
 
@@ -135,7 +139,7 @@ function App() {
         nameEN
       )
       .then((newMovies) => {
-        console.log(newMovies);
+        setNewMovies(newMovies);
       })
       .catch((err) => {
         console.log(`Возникла ошибка с лайками: ${err}`);
@@ -145,6 +149,19 @@ function App() {
   const openInfoTooltip = (status) => {
     setIsInfoTooltipOpen(true);
     setIsSuccessInfoTooltipStatus(status);
+  };
+
+  const handleRemoveMovies = (id) => {
+    apiMain
+      .deleteMovies(id)
+      .then(() => {
+        setSavedMovies((movies) =>
+          movies.filter((movieItem) => id !== movieItem._id)
+        );
+      })
+      .catch((err) => {
+        console.log(`Возникла ошибка при удалении карточки: ${err}`);
+      });
   };
 
   const handleNavigationClick = () => {
@@ -165,8 +182,6 @@ function App() {
                   <ProtectedRouteElement
                     element={Profile}
                     loggedIn={loggedIn}
-                    email={email}
-                    onInfoProfile={openInfoTooltip}
                     onUpdateUser={handleUpdateUser}
                     onExitClick={handleExitClick}
                   />
@@ -177,8 +192,13 @@ function App() {
                 element={
                   <ProtectedRouteElement
                     movies={movies}
+                    savedMovies={savedMovies}
+                    newMovies={newMovies}
                     loggedIn={loggedIn}
+                    onRemoveMovies={handleRemoveMovies}
+                    isMoviesLoaded={isMoviesLoaded}
                     onMoviesLike={handleMoviesLike}
+                    setSavedMovies={setSavedMovies}
                     element={Movies}
                   />
                 }
@@ -188,6 +208,10 @@ function App() {
                 element={
                   <ProtectedRouteElement
                     element={SavedMovies}
+                    savedMovies={savedMovies}
+                    onRemoveMovies={handleRemoveMovies}
+                    isMoviesLoaded={isMoviesLoaded}
+                    setSavedMovies={setSavedMovies}
                     loggedIn={loggedIn}
                   />
                 }

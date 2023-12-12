@@ -21,7 +21,19 @@ class ApiMain {
     }).then((response) => this._checkResponse(response));
   }
 
-  deleteCard(id) {
+  getMovies() {
+    const token = localStorage.getItem("jwt");
+    return fetch(`${this._baseUrl}/movies`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }).then((res) => this._checkResponse(res));
+  }
+
+  deleteMovies(id) {
     const token = localStorage.getItem("jwt");
     return fetch(`${this._baseUrl}/movies/${id}`, {
       method: "DELETE",
@@ -53,17 +65,17 @@ class ApiMain {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        movieId: movieId,
-        nameRU: nameRU ?? '',
-        nameEN: nameEN ?? '',
-        director: director,
-        country: country,
-        year: year,
-        duration: duration,
-        description: description,
-        trailerLink: trailerLink,
-        thumbnail: thumbnail,
-        image: image,
+        movieId,
+        nameRU: nameRU || nameEN,
+        nameEN: nameEN || nameRU,
+        director,
+        country,
+        year,
+        duration,
+        description,
+        trailerLink,
+        thumbnail,
+        image,
       }),
     }).then((res) => this._checkResponse(res));
   }

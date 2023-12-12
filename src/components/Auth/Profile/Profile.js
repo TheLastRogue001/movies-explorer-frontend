@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 import "./Profile.css";
 
-function Profile({ onExitClick, onUpdateUser, onInfoProfile }) {
+function Profile({ onExitClick, onUpdateUser }) {
   const [disabled, setDisabled] = useState(true);
   const [isValid, setIsValid] = useState(false);
   const [fields, setFields] = useState({});

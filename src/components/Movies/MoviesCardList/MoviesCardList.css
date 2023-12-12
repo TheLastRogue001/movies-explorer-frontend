@@ -18,7 +18,7 @@
 
 @media screen and (max-width: 1278px) {
   .movies__cards {
-    justify-content: center;
+    justify-content: flex-start;
     margin: 0 30px 80px;
     column-gap: 30px;
     row-gap: 30px;
@@ -27,7 +27,7 @@
 
 @media screen and (max-width: 767px) {
   .movies__cards {
-    justify-content: center;
+    justify-content: flex-start;
     row-gap: 40px;
     margin: 0 30px 76px;
   }

@@ -6,11 +6,10 @@ class ApiMovies {
     this._baseUrl = baseUrl;
   }
 
-  getInitialMovies(token) {
+  getInitialMovies() {
     return fetch(`${this._baseUrl}`, {
       method: "GET",
       headers: {
-        authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     }).then((res) => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`));

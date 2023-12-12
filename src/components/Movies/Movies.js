@@ -1,43 +1,83 @@
-import React, { useState } from "react";
-import { BlackMovie, Movie, StoryMovie } from "../../images";
+import React, { useState, useEffect } from "react";
 import SearchForm from "./SearchForm/SearchForm";
 import FilterCheckbox from "./FilterCheckbox/FilterCheckbox";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
+import Preloader from "../Preloader/Preloader";
 import MoviesCard from "./MoviesCard/MoviesCard";
 import "./Movies.css";
 
-function Movies({ movies, onMoviesLike }) {
+function Movies({
+  movies,
+  onMoviesLike,
+  newMovies,
+  isMoviesLoaded,
+  onRemoveMovies,
+}) {
   const [short, setShort] = useState(false);
+  const [search, setSearch] = useState("");
   const [buttonElse, setButtonElse] = useState(true);
-  let [nowMovies, setNowMovies] = useState(13);
-  let moviesLength = 0;
+  const [widthScreen, setWidthScreen] = useState(window.innerWidth);
+  const [limitMovies, setLimitMovies] = useState(12);
+
+  let [filteredMovies, setFilteredMovies] = useState([]);
+
+  const handleSearchMovies = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const handleCheckbox = (e) => {
+    setShort(e.target.checked);
+  };
+
+  useEffect(() => {
+    let filtered = movies.slice();
+
+    if (search) {
+      const text = search.toLowerCase();
+      filtered = filtered.filter(
+        (moviesSearch) =>
+          moviesSearch.nameRU.toLowerCase().includes(text) ||
+          moviesSearch.nameEN.toLowerCase().includes(text)
+      );
+    }
+
+    if (short) {
+      filtered = filtered.filter((moviesShort) => moviesShort.duration < 40);
+    }
+
+    setFilteredMovies(filtered.slice(0, limitMovies));
+  }, [movies, search, short, limitMovies]);
 
   return (
     <main className="movies">
       <form className="movies__form" name="search">
-        <SearchForm />
+        <SearchForm onChange={handleSearchMovies} onClick={() => {}} />
         <div className="movies__switch">
-          <FilterCheckbox isOn={short} handleToggle={() => setShort(!short)} />
+          <FilterCheckbox isOn={short} handleToggle={handleCheckbox} />
           <h3 className="movies__h3">Короткометражки</h3>
         </div>
       </form>
       <MoviesCardList>
-        {movies
-          .filter(() => {
-            ++moviesLength;
-            if (moviesLength >= nowMovies) return false;
-            return true;
-          })
-          .map((info) => (
-            <MoviesCard onMoviesLike={onMoviesLike} info={info} />
-          ))}
+        {!isMoviesLoaded ? <Preloader /> : null}
+        {filteredMovies.length === 0 && isMoviesLoaded ? (
+          <h2 className="movies__not-found">Ничего не найдено!</h2>
+        ) : null}
+        {filteredMovies.map((info, index) => (
+          <MoviesCard
+            key={index}
+            newMovies={newMovies}
+            onRemoveMovies={onRemoveMovies}
+            onMoviesLike={onMoviesLike}
+            info={info}
+          />
+        ))}
       </MoviesCardList>
       <section className="movies__continue">
         {buttonElse ? (
           <button
             onClick={() => {
-              if (moviesLength <= nowMovies) setButtonElse(false);
-              setNowMovies(nowMovies + 13);
+              // if (filteredMovies.length < limitMovies) setButtonElse(false);
+              setLimitMovies(limitMovies + 12);
             }}
             type="button"
             className="movies__next"

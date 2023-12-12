@@ -61,6 +61,17 @@
   transition: opacity 0.5s, visibility 0s linear;
 }
 
+.movies__not-found {
+  color: #424242;
+  text-align: right;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border: none;
+}
+
 @media screen and (max-width: 1278px) {
   .movies {
     padding-top: 80px;
