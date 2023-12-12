@@ -16,7 +16,6 @@ function Movies({
   const [short, setShort] = useState(false);
   const [search, setSearch] = useState("");
   const [buttonElse, setButtonElse] = useState(true);
-  const [widthScreen, setWidthScreen] = useState(window.innerWidth);
   const [limitMovies, setLimitMovies] = useState(12);
 
   let [filteredMovies, setFilteredMovies] = useState([]);
@@ -27,6 +26,7 @@ function Movies({
 
   const handleCheckbox = (e) => {
     setShort(e.target.checked);
+    if (short) setButtonElse(true);
   };
 
   useEffect(() => {
@@ -43,9 +43,12 @@ function Movies({
 
     if (short) {
       filtered = filtered.filter((moviesShort) => moviesShort.duration < 40);
+      setButtonElse(false);
     }
 
-    setFilteredMovies(filtered.slice(0, limitMovies));
+    filtered = filtered.slice(0, limitMovies);
+
+    setFilteredMovies(filtered);
   }, [movies, search, short, limitMovies]);
 
   return (
@@ -76,7 +79,7 @@ function Movies({
         {buttonElse ? (
           <button
             onClick={() => {
-              // if (filteredMovies.length < limitMovies) setButtonElse(false);
+              if (filteredMovies.length < limitMovies) setButtonElse(false);
               setLimitMovies(limitMovies + 12);
             }}
             type="button"
