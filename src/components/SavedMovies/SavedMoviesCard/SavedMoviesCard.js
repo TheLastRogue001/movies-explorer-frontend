@@ -19,8 +19,8 @@ const SavedMoviesCard = ({ movies, onClickRemove }) => {
         <img src={movies?.image} alt="Фильм" className="movies__img" />
       </a>
       <div className="movies__info">
-        <h2 className="movies__title">{movies?.nameRU || movies?.nameEN}</h2>
         <div className="movies__content">
+          <h2 className="movies__title">{movies?.nameRU || movies?.nameEN}</h2>
           <button
             type="button"
             aria-label="Удалить"
@@ -28,10 +28,10 @@ const SavedMoviesCard = ({ movies, onClickRemove }) => {
             className="movies__remove"
           />
         </div>
-        <label className="movies__time">
-          {toHoursAndMinutes(movies?.duration)}
-        </label>
       </div>
+      <label className="movies__time">
+        {toHoursAndMinutes(movies?.duration)}
+      </label>
     </li>
   );
 };

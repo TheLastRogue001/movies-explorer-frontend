@@ -173,7 +173,10 @@ function App() {
       <div className="page">
         <div className="layout">
           <div className="layout__container">
-            <Header onNavigationClick={handleNavigationClick} />
+            <Header
+              loggedIn={loggedIn}
+              onNavigationClick={handleNavigationClick}
+            />
             <Routes>
               <Route path="/" element={<Main />} />
               <Route
@@ -220,7 +223,12 @@ function App() {
               <Route path="/static" element={<Static />} />
               <Route
                 path="/signup"
-                element={<Register onInfoAuth={openInfoTooltip} />}
+                element={
+                  <Register
+                    handleLogin={handleLogin}
+                    onInfoAuth={openInfoTooltip}
+                  />
+                }
               />
               <Route
                 path="/signin"

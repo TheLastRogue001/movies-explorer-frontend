@@ -13,10 +13,16 @@ function Movies({
   isMoviesLoaded,
   onRemoveMovies,
 }) {
+  const width = window.innerWidth;
+  let movesCount = 12;
+  if (width <= 768)
+    movesCount = 8;
+  if (width <= 480)
+    movesCount = 5;
   const [short, setShort] = useState(false);
   const [search, setSearch] = useState("");
   const [buttonElse, setButtonElse] = useState(true);
-  const [limitMovies, setLimitMovies] = useState(12);
+  const [limitMovies, setLimitMovies] = useState(movesCount);
 
   let [filteredMovies, setFilteredMovies] = useState([]);
 
@@ -80,7 +86,7 @@ function Movies({
           <button
             onClick={() => {
               if (filteredMovies.length < limitMovies) setButtonElse(false);
-              setLimitMovies(limitMovies + 12);
+              setLimitMovies(limitMovies + movesCount);
             }}
             type="button"
             className="movies__next"

@@ -5,19 +5,30 @@ import "./Profile.css";
 
 function Profile({ onExitClick, onUpdateUser }) {
   const [disabled, setDisabled] = useState(true);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
   const [isValid, setIsValid] = useState(false);
   const [fields, setFields] = useState({});
   const [errors, setErrors] = useState({});
+  const [IsInfo, setIsInfo] = useState(false);
 
   const currentUser = useContext(CurrentUserContext);
+
+  function isValiEmail(val) {
+    let regEmail =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regEmail.test(val);
+  }
 
   const handleChange = (event) => {
     const target = event.target;
     const name = target.name;
     const value = target.value;
+    const type = target.type;
     setFields({ ...fields, [name]: value });
     setErrors({ ...errors, [name]: target.validationMessage });
-    setIsValid(target.closest("form").checkValidity());
+    const emailValid = type === "email" ? isValiEmail(value) : true;
+    if (!emailValid) setErrors({ ...errors, [name]: "Невалидный email" });
+    setIsValid(target.closest("form").checkValidity() && emailValid);
   };
 
   const resetForm = useCallback(
@@ -40,6 +51,14 @@ function Profile({ onExitClick, onUpdateUser }) {
 
     resetForm();
   };
+
+  const textInfo = `profile__p ${IsInfo ? "" : "profile__p_disabled"}`;
+
+  useEffect(() => {
+    setButtonDisabled(
+      fields.name === currentUser.name && fields.email === currentUser.email
+    );
+  });
 
   useEffect(() => {
     setFields({
@@ -65,9 +84,10 @@ function Profile({ onExitClick, onUpdateUser }) {
               type="text"
               name="name"
               disabled={disabled}
-              placeholder={fields.name ?? ""}
+              placeholder=""
               min-length="2"
               max-length="40"
+              value={fields.name ?? ""}
               required
               onChange={(e) => handleChange(e)}
               className="profile__input"
@@ -81,9 +101,10 @@ function Profile({ onExitClick, onUpdateUser }) {
               type="email"
               name="email"
               disabled={disabled}
-              placeholder={fields.email ?? ""}
+              placeholder=""
               min-length="2"
               max-length="40"
+              value={fields.email ?? ""}
               required
               onChange={(e) => handleChange(e)}
               className="profile__input"
@@ -92,6 +113,7 @@ function Profile({ onExitClick, onUpdateUser }) {
           <span className="profile__input-error">{errors.email}</span>
           {disabled ? (
             <div className="profile__buttons">
+              <p className={textInfo}>Данные были сохранены</p>
               <button
                 type="button"
                 onClick={(e) => {
@@ -116,7 +138,13 @@ function Profile({ onExitClick, onUpdateUser }) {
                 id="submit"
                 type="submit"
                 value="Submit"
-                disabled={!isValid}
+                disabled={!isValid || buttonDisabled}
+                onClick={() => {
+                  setTimeout(() => {
+                    setIsInfo(false);
+                  }, 5000);
+                  setIsInfo(true);
+                }}
                 className="profile__save"
               >
                 Сохранить

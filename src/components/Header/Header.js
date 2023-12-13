@@ -47,31 +47,78 @@ const getHeader = (onNavigationClick) => {
   );
 };
 
-function Header({ onNavigationClick }) {
+function Header({ onNavigationClick, loggedIn }) {
   return (
     <Routes>
       <Route
         path="/"
         element={
-          <header className="header header-main">
-            <img className="header__logo" alt="Логотип" src={Logo} />
-            <div className="header__components">
+          loggedIn ? (
+            <header className="header header__movies_loggedin">
+              <div className="header__container">
+                <Link
+                  className="header__main"
+                  onClick={() => {
+                    localStorage.removeItem("jwt");
+                  }}
+                  to="/"
+                >
+                  <img className="header__logo" alt="Логотип" src={Logo} />
+                </Link>
+                <div className="header__pages">
+                  <Link className="header__link" to="/movies">
+                    Фильмы
+                  </Link>
+                  <Link className="header__link" to="/saved-movies">
+                    Сохраненные фильмы
+                  </Link>
+                </div>
+              </div>
+              <label className="header__label" htmlFor="info-header">
+                <img alt="Меню" className="header__menu" src={Menu} />
+              </label>
+              <input
+                className="header__checkbox"
+                type="checkbox"
+                name="menu"
+                id="info-header"
+                onClick={onNavigationClick}
+              />
               <Link
-                to="/signup"
-                // onClick={onExitClick}
-                className="header__caption header__signup"
+                to="/profile"
+                className="header__components header__components-profile_loggedin"
               >
-                Регистрация
+                <h2 className="header__h2 header__h2-profile">Аккаунт</h2>
+                <div className="header__img-profile">
+                  <img
+                    src={IconProfile}
+                    className="header__img"
+                    alt="Профиль"
+                  />
+                </div>
               </Link>
-              <Link
-                to="/signin"
-                // onClick={onExitClick}
-                className="header__caption header__signin"
-              >
-                Войти
-              </Link>
-            </div>
-          </header>
+            </header>
+          ) : (
+            <header className="header header-main">
+              <img className="header__logo" alt="Логотип" src={Logo} />
+              <div className="header__components">
+                <Link
+                  to="/signup"
+                  // onClick={onExitClick}
+                  className="header__caption header__signup"
+                >
+                  Регистрация
+                </Link>
+                <Link
+                  to="/signin"
+                  // onClick={onExitClick}
+                  className="header__caption header__signin"
+                >
+                  Войти
+                </Link>
+              </div>
+            </header>
+          )
         }
       />
       <Route path="/profile" element={getHeader(onNavigationClick)} />

@@ -4,18 +4,27 @@ import { Logo } from "../../../images";
 import "./Register.css";
 import { apiMain } from "../../../utils/MainApi";
 
-function Register({ onInfoAuth }) {
+function Register({ onInfoAuth, handleLogin }) {
   const [fields, setFields] = useState({});
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
+
+  function isValiEmail(val) {
+    let regEmail =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regEmail.test(val);
+  }
 
   const handleChange = (event) => {
     const target = event.target;
     const name = target.name;
     const value = target.value;
+    const type = target.type;
     setFields({ ...fields, [name]: value });
     setErrors({ ...errors, [name]: target.validationMessage });
-    setIsValid(target.closest("form").checkValidity());
+    const emailValid = type === "email" ? isValiEmail(value) : true;
+    if (!emailValid) setErrors({ ...errors, [name]: "Невалидный email" });
+    setIsValid(target.closest("form").checkValidity() && emailValid);
   };
 
   const resetForm = useCallback(
@@ -34,7 +43,18 @@ function Register({ onInfoAuth }) {
         .register(fields.name, fields.email, fields.password)
         .then((res) => {
           onInfoAuth(true);
-          navigate("/signin", { replace: true });
+        })
+        .catch((err) => {
+          onInfoAuth(false);
+        });
+
+      apiMain
+        .authorize(fields.email, fields.password)
+        .then((data) => {
+          if (data.token) {
+            handleLogin();
+            navigate("/movies", { replace: true });
+          }
         })
         .catch((err) => {
           onInfoAuth(false);
@@ -85,7 +105,9 @@ function Register({ onInfoAuth }) {
                 min-length="2"
                 max-length="40"
                 placeholder="E-mail"
-                onChange={(e) => handleChange(e)}
+                onChange={(e) => {
+                  handleChange(e);
+                }}
                 value={fields.email ?? ""}
                 className="register__input"
               ></input>
