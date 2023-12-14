@@ -1,42 +1,50 @@
 import React, { useEffect, useState } from "react";
+import { apiMain } from "../../../utils/MainApi";
+
 import "./MoviesCard.css";
 
-const MoviesCard = ({ info, onMoviesLike, newMovies, onRemoveMovies }) => {
-  const [IsLiked, setIsLiked] = useState(false);
+const MoviesCard = ({ info, onRemoveMovies }) => {
+  const [IsLiked, setIsLiked] = useState(localStorage.getItem("like"));
+  const [createMovies, setCreateMoves] = useState({});
   const moviesLikeButton = `movies__like ${
     IsLiked ? "movies__like_active" : ""
   }`;
 
-  // useEffect(() => {
-  //   window.localStorage.setItem("like", IsLiked);
-  // }, [IsLiked]);
-
-  // useEffect(() => {
-  //   setIsLiked(window.localStorage.getItem("like"));
-  // }, []);
+  useEffect(() => {
+    setIsLiked(!localStorage.getItem("like"));
+  }, []);
 
   const thumbnail = `https://api.nomoreparties.co/${info?.image.formats.thumbnail.url}`;
   const image = `https://api.nomoreparties.co/${info?.image.url}`;
 
   const handleLikeClick = () => {
-    setIsLiked(!IsLiked);
-    if (!IsLiked) {
-      onMoviesLike(
-        info.country,
-        info.director,
-        info.duration,
-        info.year,
-        info.description,
-        image,
-        info.trailerLink,
-        thumbnail,
-        info.id,
-        info.nameEn,
-        info.nameRU
-      );
+    setIsLiked(!localStorage.setItem("like", !IsLiked));
+    if (IsLiked === false) {
+      setIsLiked(true);
+      return apiMain
+        .createMovies(
+          info.country,
+          info.director,
+          info.duration,
+          info.year,
+          info.description,
+          image,
+          info.trailerLink,
+          thumbnail,
+          info.id,
+          info.nameRU,
+          info.nameEN
+        )
+        .then((newMovies) => {
+          setCreateMoves(newMovies);
+        })
+        .catch((err) => {
+          console.log(`Возникла ошибка с лайками: ${err}`);
+        });
     }
     if (IsLiked) {
-      onRemoveMovies(newMovies._id);
+      setIsLiked(false);
+      return onRemoveMovies(createMovies._id);
     }
   };
 
@@ -56,7 +64,6 @@ const MoviesCard = ({ info, onMoviesLike, newMovies, onRemoveMovies }) => {
         <h2 className="movies__title">{info?.nameRU || info?.nameEN}</h2>
         <div className="movies__content">
           <button
-            type="button"
             aria-label="Нравится"
             onClick={handleLikeClick}
             className={moviesLikeButton}

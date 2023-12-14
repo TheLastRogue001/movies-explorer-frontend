@@ -6,13 +6,7 @@ import Preloader from "../Preloader/Preloader";
 import MoviesCard from "./MoviesCard/MoviesCard";
 import "./Movies.css";
 
-function Movies({
-  movies,
-  onMoviesLike,
-  newMovies,
-  isMoviesLoaded,
-  onRemoveMovies,
-}) {
+function Movies({ movies, isMoviesLoaded, onRemoveMovies }) {
   const width = window.innerWidth;
   let movesCount = 12;
   if (width <= 768) movesCount = 8;
@@ -25,7 +19,6 @@ function Movies({
   let [filteredMovies, setFilteredMovies] = useState([]);
 
   const handleSearchMovies = (e) => {
-    e.preventDefault();
     setSearch(e.target.value);
     if (search.length === 1) localStorage.setItem("search", "");
   };
@@ -35,8 +28,7 @@ function Movies({
     if (short) setButtonElse(true);
   };
 
-  const handleSearchButton = (e) => {
-    e.preventDefault();
+  const handleSearchButton = () => {
     let filtered = movies.slice();
 
     if (search) {
@@ -58,26 +50,32 @@ function Movies({
     if (short === false) localStorage.removeItem("short");
 
     filtered = filtered.slice(0, limitMovies);
-
     setFilteredMovies(filtered);
   };
 
   useEffect(() => {
     setSearch(localStorage.getItem("search"));
     setShort(localStorage.getItem("short"));
+    handleSearchButton();
   }, []);
 
   return (
     <main className="movies">
       <form
-        onSubmit={handleSearchButton}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSearchButton();
+        }}
         className="movies__form"
         name="search"
       >
         <SearchForm
           onChange={handleSearchMovies}
           search={search}
-          onClick={handleSearchButton}
+          onClick={(e) => {
+            e.preventDefault();
+            handleSearchButton();
+          }}
         />
         <div className="movies__switch">
           <FilterCheckbox isOn={short} handleToggle={handleCheckbox} />
@@ -89,14 +87,8 @@ function Movies({
         {filteredMovies.length === 0 && isMoviesLoaded ? (
           <h2 className="movies__not-found">Ничего не найдено!</h2>
         ) : null}
-        {filteredMovies.map((info, index) => (
-          <MoviesCard
-            key={index}
-            newMovies={newMovies}
-            onRemoveMovies={onRemoveMovies}
-            onMoviesLike={onMoviesLike}
-            info={info}
-          />
+        {filteredMovies.map((info, key) => (
+          <MoviesCard key={key} onRemoveMovies={onRemoveMovies} info={info} />
         ))}
       </MoviesCardList>
       <section className="movies__continue">

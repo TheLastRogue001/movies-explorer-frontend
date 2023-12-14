@@ -18,7 +18,7 @@ function SavedMovies({
     localStorage.getItem("saved-short")
   );
   const [savedSearch, setSavedSearch] = useState(
-    localStorage.getItem("saved-search") ?? ""
+    localStorage.getItem("saved-search")
   );
 
   let [filteredMovies, setFilteredMovies] = useState([]);
@@ -26,7 +26,6 @@ function SavedMovies({
   const currentUser = useContext(CurrentUserContext);
 
   const handleSearchMovies = (e) => {
-    e.preventDefault();
     setSavedSearch(e.target.value);
     if (savedSearch.length === 1) localStorage.setItem("saved-search", "");
   };
@@ -103,9 +102,9 @@ function SavedMovies({
         {filteredMovies.length === 0 && isMoviesLoaded ? (
           <h2 className="movies__not-found">Ничего не найдено!</h2>
         ) : null}
-        {filteredMovies.map((movies, index) => (
+        {filteredMovies.map((movies, key) => (
           <SavedMoviesCard
-            key={index}
+            key={key}
             onClickRemove={onRemoveMovies}
             movies={movies}
           />

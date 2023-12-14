@@ -36,8 +36,6 @@ function App() {
 
   const [savedMovies, setSavedMovies] = useState([]);
 
-  const [newMovies, setNewMovies] = useState({});
-
   const [loggedIn, setLoggedIn] = useState(false);
 
   const navigate = useNavigate();
@@ -76,7 +74,6 @@ function App() {
         .getInitialMovies()
         .then((initialCards) => {
           setMovies(initialCards);
-          console.log(initialCards);
           setIsMoviesLoaded(true);
         })
         .catch((err) => {
@@ -109,41 +106,6 @@ function App() {
         console.log(
           `Возникла ошибка при получении данных пользователя: ${err}`
         );
-      });
-  };
-
-  const handleMoviesLike = (
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailerLink,
-    thumbnail,
-    movieId,
-    nameRU,
-    nameEN
-  ) => {
-    apiMain
-      .createMovies(
-        country,
-        director,
-        duration,
-        year,
-        description,
-        image,
-        trailerLink,
-        thumbnail,
-        movieId,
-        nameRU,
-        nameEN
-      )
-      .then((newMovies) => {
-        setNewMovies(newMovies);
-      })
-      .catch((err) => {
-        console.log(`Возникла ошибка с лайками: ${err}`);
       });
   };
 
@@ -197,11 +159,9 @@ function App() {
                   <ProtectedRouteElement
                     movies={movies}
                     savedMovies={savedMovies}
-                    newMovies={newMovies}
                     loggedIn={loggedIn}
                     onRemoveMovies={handleRemoveMovies}
                     isMoviesLoaded={isMoviesLoaded}
-                    onMoviesLike={handleMoviesLike}
                     setSavedMovies={setSavedMovies}
                     element={Movies}
                   />
