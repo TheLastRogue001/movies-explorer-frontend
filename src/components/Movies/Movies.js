@@ -25,6 +25,7 @@ function Movies({
   let [filteredMovies, setFilteredMovies] = useState([]);
 
   const handleSearchMovies = (e) => {
+    e.preventDefault();
     setSearch(e.target.value);
     if (search.length === 1) localStorage.setItem("search", "");
   };
@@ -34,7 +35,8 @@ function Movies({
     if (short) setButtonElse(true);
   };
 
-  useEffect(() => {
+  const handleSearchButton = (e) => {
+    e.preventDefault();
     let filtered = movies.slice();
 
     if (search) {
@@ -58,7 +60,7 @@ function Movies({
     filtered = filtered.slice(0, limitMovies);
 
     setFilteredMovies(filtered);
-  }, [movies, search, short, limitMovies]);
+  };
 
   useEffect(() => {
     setSearch(localStorage.getItem("search"));
@@ -67,11 +69,15 @@ function Movies({
 
   return (
     <main className="movies">
-      <form className="movies__form" name="search">
+      <form
+        onSubmit={handleSearchButton}
+        className="movies__form"
+        name="search"
+      >
         <SearchForm
           onChange={handleSearchMovies}
           search={search}
-          onClick={() => {}}
+          onClick={handleSearchButton}
         />
         <div className="movies__switch">
           <FilterCheckbox isOn={short} handleToggle={handleCheckbox} />
