@@ -14,7 +14,7 @@ function Movies({ movies, isMoviesLoaded, onRemoveMovies }) {
   const [short, setShort] = useState(localStorage.getItem("short"));
   const [search, setSearch] = useState(localStorage.getItem("search"));
   const [buttonElse, setButtonElse] = useState(true);
-  const [limitMovies, setLimitMovies] = useState(movesCount);
+  const [limitMovies, setLimitMovies] = useState(1);
 
   let [filteredMovies, setFilteredMovies] = useState([]);
 
@@ -29,7 +29,7 @@ function Movies({ movies, isMoviesLoaded, onRemoveMovies }) {
   };
 
   const handleSearchButton = () => {
-    let filtered = movies.slice();
+    let filtered = movies;
 
     if (search) {
       const text = search.toLowerCase();
@@ -49,7 +49,6 @@ function Movies({ movies, isMoviesLoaded, onRemoveMovies }) {
 
     if (short === false) localStorage.removeItem("short");
 
-    filtered = filtered.slice(0, limitMovies);
     setFilteredMovies(filtered);
   };
 
@@ -87,16 +86,23 @@ function Movies({ movies, isMoviesLoaded, onRemoveMovies }) {
         {filteredMovies.length === 0 && isMoviesLoaded ? (
           <h2 className="movies__not-found">Ничего не найдено!</h2>
         ) : null}
-        {filteredMovies.map((info, key) => (
-          <MoviesCard key={key} onRemoveMovies={onRemoveMovies} info={info} />
-        ))}
+        {filteredMovies
+          .slice(0 * movesCount, limitMovies * movesCount)
+          .map((info, key) => (
+            <MoviesCard key={key} onRemoveMovies={onRemoveMovies} info={info} />
+          ))}
       </MoviesCardList>
       <section className="movies__continue">
         {buttonElse ? (
           <button
             onClick={() => {
-              if (filteredMovies.length < limitMovies) setButtonElse(false);
-              setLimitMovies(limitMovies + movesCount);
+              if (
+                filteredMovies.length - limitMovies * movesCount <
+                limitMovies
+              )
+                setButtonElse(false);
+              if (filteredMovies.length === 0) setButtonElse(true);
+              setLimitMovies(limitMovies + 1);
             }}
             type="button"
             className="movies__next"
