@@ -11,7 +11,7 @@ const MoviesCard = ({ info, onRemoveMovies }) => {
   }`;
 
   useEffect(() => {
-    setIsLiked(!localStorage.getItem("like"));
+    setIsLiked(localStorage.getItem("like"));
   }, []);
 
   const thumbnail = `https://api.nomoreparties.co/${info?.image.formats.thumbnail.url}`;
