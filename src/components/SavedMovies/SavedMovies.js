@@ -14,8 +14,12 @@ function SavedMovies({
   setSavedMovies,
   isMoviesLoaded,
 }) {
-  const [savedShort, setSavedShort] = useState(localStorage.getItem("saved-short"));
-  const [savedSearch, setSavedSearch] = useState("");
+  const [savedShort, setSavedShort] = useState(
+    localStorage.getItem("saved-short")
+  );
+  const [savedSearch, setSavedSearch] = useState(
+    localStorage.getItem("saved-search") ?? ""
+  );
 
   let [filteredMovies, setFilteredMovies] = useState([]);
 
@@ -23,6 +27,7 @@ function SavedMovies({
 
   const handleSearchMovies = (e) => {
     setSavedSearch(e.target.value);
+    if (savedSearch.length === 1) localStorage.setItem("saved-search", "");
   };
 
   const handleCheckbox = (e) => {
@@ -39,7 +44,6 @@ function SavedMovies({
           moviesSearch.nameRU.toLowerCase().includes(s) ||
           moviesSearch.nameEN.toLowerCase().includes(s)
       );
-      if (savedSearch === "") localStorage.setItem("saved-search", "");
       localStorage.setItem("saved-search", savedSearch);
     }
 

@@ -18,7 +18,7 @@ function Movies({
   if (width <= 768) movesCount = 8;
   if (width <= 480) movesCount = 5;
   const [short, setShort] = useState(localStorage.getItem("short"));
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(localStorage.getItem("search"));
   const [buttonElse, setButtonElse] = useState(true);
   const [limitMovies, setLimitMovies] = useState(movesCount);
 
@@ -26,6 +26,7 @@ function Movies({
 
   const handleSearchMovies = (e) => {
     setSearch(e.target.value);
+    if (search.length === 1) localStorage.setItem("search", "");
   };
 
   const handleCheckbox = (e) => {
@@ -43,7 +44,6 @@ function Movies({
           moviesSearch.nameRU.toLowerCase().includes(text) ||
           moviesSearch.nameEN.toLowerCase().includes(text)
       );
-      if (search === "") localStorage.setItem("search", "");
       localStorage.setItem("search", search);
     }
 
