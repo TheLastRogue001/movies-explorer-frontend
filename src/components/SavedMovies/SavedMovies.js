@@ -26,6 +26,7 @@ function SavedMovies({
   const currentUser = useContext(CurrentUserContext);
 
   const handleSearchMovies = (e) => {
+    e.preventDefault();
     setSavedSearch(e.target.value);
     if (savedSearch.length === 1) localStorage.setItem("saved-search", "");
   };
@@ -34,7 +35,8 @@ function SavedMovies({
     setSavedShort(e.target.checked);
   };
 
-  useEffect(() => {
+  const handleSearchButton = (e) => {
+    e.preventDefault();
     let filtered = savedMovies;
 
     if (savedSearch) {
@@ -54,6 +56,11 @@ function SavedMovies({
 
     if (savedShort === false) localStorage.removeItem("saved-short");
 
+    setFilteredMovies(filtered);
+  };
+
+  useEffect(() => {
+    let filtered = savedMovies;
     setFilteredMovies(filtered);
   }, [savedMovies, savedSearch, savedShort]);
 
@@ -80,11 +87,11 @@ function SavedMovies({
 
   return (
     <main className="movies">
-      <form className="movies__form" name="search">
+      <form onSubmit={handleSearchButton} className="movies__form" name="search">
         <SearchForm
           onChange={handleSearchMovies}
           search={savedSearch}
-          onClick={() => {}}
+          onClick={handleSearchButton}
         />
         <div className="movies__switch">
           <FilterCheckbox isOn={savedShort} handleToggle={handleCheckbox} />
