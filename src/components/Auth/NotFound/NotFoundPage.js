@@ -11,7 +11,7 @@ function NotFoundPage() {
         <button
           type="button"
           onClick={() => {
-            localStorage.removeItem("jwt");
+            localStorage.clear();
             navigate(-1);
           }}
           className="not-found__link"

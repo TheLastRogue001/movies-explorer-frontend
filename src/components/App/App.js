@@ -76,6 +76,7 @@ function App() {
         .getInitialMovies()
         .then((initialCards) => {
           setMovies(initialCards);
+          console.log(initialCards);
           setIsMoviesLoaded(true);
         })
         .catch((err) => {
@@ -90,7 +91,7 @@ function App() {
   };
 
   const handleExitClick = () => {
-    localStorage.removeItem("jwt");
+    localStorage.clear();
     setLoggedIn(false);
   };
 

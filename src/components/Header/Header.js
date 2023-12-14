@@ -8,9 +8,6 @@ const getHeader = (onNavigationClick) => {
       <div className="header__container">
         <Link
           className="header__main"
-          onClick={() => {
-            localStorage.removeItem("jwt");
-          }}
           to="/"
         >
           <img className="header__logo" alt="Логотип" src={Logo} />
@@ -58,9 +55,6 @@ function Header({ onNavigationClick, loggedIn }) {
               <div className="header__container">
                 <Link
                   className="header__main"
-                  onClick={() => {
-                    localStorage.removeItem("jwt");
-                  }}
                   to="/"
                 >
                   <img className="header__logo" alt="Логотип" src={Logo} />

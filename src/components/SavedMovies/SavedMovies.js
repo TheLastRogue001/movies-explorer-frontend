@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { apiMain } from "../../utils/MainApi";
-import FilterCheckbox from "../Movies/FilterCheckbox/FilterCheckbox";
+import FilterCheckbox from "./FilterCheckbox/FilterCheckbox";
 import MoviesCardList from "../Movies/MoviesCardList/MoviesCardList";
-import SearchForm from "../Movies/SearchForm/SearchForm";
+import SearchForm from "./SearchForm/SearchForm";
 import Preloader from "../Preloader/Preloader";
 import SavedMoviesCard from "../SavedMovies/SavedMoviesCard/SavedMoviesCard";
 import "./SavedMovies.css";
@@ -14,39 +14,44 @@ function SavedMovies({
   setSavedMovies,
   isMoviesLoaded,
 }) {
-  const [short, setShort] = useState(false);
-  const [search, setSearch] = useState("");
+  const [savedShort, setSavedShort] = useState(localStorage.getItem("saved-short"));
+  const [savedSearch, setSavedSearch] = useState("");
 
   let [filteredMovies, setFilteredMovies] = useState([]);
 
   const currentUser = useContext(CurrentUserContext);
 
   const handleSearchMovies = (e) => {
-    setSearch(e.target.value);
+    setSavedSearch(e.target.value);
   };
 
   const handleCheckbox = (e) => {
-    setShort(e.target.checked);
+    setSavedShort(e.target.checked);
   };
 
   useEffect(() => {
     let filtered = savedMovies;
 
-    if (search) {
-      const s = search.toLowerCase();
+    if (savedSearch) {
+      const s = savedSearch.toLowerCase();
       filtered = filtered.filter(
         (moviesSearch) =>
           moviesSearch.nameRU.toLowerCase().includes(s) ||
           moviesSearch.nameEN.toLowerCase().includes(s)
       );
+      if (savedSearch === "") localStorage.setItem("saved-search", "");
+      localStorage.setItem("saved-search", savedSearch);
     }
 
-    if (short) {
+    if (savedShort) {
       filtered = filtered.filter((moviesShort) => moviesShort.duration < 40);
+      localStorage.setItem("saved-short", savedShort);
     }
+
+    if (savedShort === false) localStorage.removeItem("saved-short");
 
     setFilteredMovies(filtered);
-  }, [savedMovies, search, short]);
+  }, [savedMovies, savedSearch, savedShort]);
 
   useEffect(() => {
     apiMain
@@ -64,14 +69,21 @@ function SavedMovies({
       .catch((err) => {
         console.log(`Ошибка данных: ${err}`);
       });
+
+    setSavedSearch(localStorage.getItem("saved-search"));
+    setSavedShort(localStorage.getItem("saved-short"));
   }, []);
 
   return (
     <main className="movies">
       <form className="movies__form" name="search">
-        <SearchForm onChange={handleSearchMovies} onClick={() => {}} />
+        <SearchForm
+          onChange={handleSearchMovies}
+          search={savedSearch}
+          onClick={() => {}}
+        />
         <div className="movies__switch">
-          <FilterCheckbox isOn={short} handleToggle={handleCheckbox} />
+          <FilterCheckbox isOn={savedShort} handleToggle={handleCheckbox} />
           <h3 className="movies__h3">Короткометражки</h3>
         </div>
       </form>

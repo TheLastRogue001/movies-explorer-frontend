@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./MoviesCard.css";
 
 const MoviesCard = ({ info, onMoviesLike, newMovies, onRemoveMovies }) => {
@@ -6,6 +6,14 @@ const MoviesCard = ({ info, onMoviesLike, newMovies, onRemoveMovies }) => {
   const moviesLikeButton = `movies__like ${
     IsLiked ? "movies__like_active" : ""
   }`;
+
+  // useEffect(() => {
+  //   window.localStorage.setItem("like", IsLiked);
+  // }, [IsLiked]);
+
+  // useEffect(() => {
+  //   setIsLiked(window.localStorage.getItem("like"));
+  // }, []);
 
   const thumbnail = `https://api.nomoreparties.co/${info?.image.formats.thumbnail.url}`;
   const image = `https://api.nomoreparties.co/${info?.image.url}`;
@@ -44,7 +52,7 @@ const MoviesCard = ({ info, onMoviesLike, newMovies, onRemoveMovies }) => {
       <a href={info?.trailerLink} rel="noreferrer" target="_blank">
         <img src={image} alt="Фильм" className="movies__img" />
       </a>
-      <div className="movies__info">
+      <div className="movies__info_like">
         <h2 className="movies__title">{info?.nameRU || info?.nameEN}</h2>
         <div className="movies__content">
           <button
@@ -54,7 +62,7 @@ const MoviesCard = ({ info, onMoviesLike, newMovies, onRemoveMovies }) => {
             className={moviesLikeButton}
           />
         </div>
-        <label className="movies__time">
+        <label className="movies__time_like">
           {toHoursAndMinutes(info?.duration)}
         </label>
       </div>

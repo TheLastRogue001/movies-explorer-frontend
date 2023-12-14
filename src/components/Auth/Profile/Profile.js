@@ -56,7 +56,7 @@ function Profile({ onExitClick, onUpdateUser }) {
 
   useEffect(() => {
     setButtonDisabled(
-      fields.name === currentUser.name && fields.email === currentUser.email
+      fields.name === currentUser?.name && fields.email === currentUser?.email
     );
   });
 

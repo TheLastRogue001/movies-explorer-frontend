@@ -8,7 +8,7 @@
   padding-bottom: 16px;
   box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.08);
 }
-.movies__info {
+.movies__info_like {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -27,7 +27,7 @@
   margin: 0;
   margin-top: 16px;
 }
-.movies__time {
+.movies__time_like {
   color: #8b8b8b;
   font-family: "Inter", Arial, Helvetica, sans-serif;
   font-size: 11px;
@@ -108,7 +108,7 @@
     font-size: 12px;
     margin-top: 14px;
   }
-  .movies__time {
+  .movies__time_like {
     font-size: 10px;
     margin-top: 2px;
   }
