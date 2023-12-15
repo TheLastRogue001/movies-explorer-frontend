@@ -51,7 +51,7 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin: 0 0 16px 16px ;
+  margin: 0 0 16px 16px;
 }
 .movies__like {
   cursor: pointer;
@@ -128,5 +128,11 @@
   .movies__time {
     font-size: 10px;
     margin-top: 2px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .movies__remove {
+    display: block;
   }
 }

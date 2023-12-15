@@ -4,14 +4,14 @@ import { apiMain } from "../../../utils/MainApi";
 import "./MoviesCard.css";
 
 const MoviesCard = ({ info, onRemoveMovies }) => {
-  const [IsLiked, setIsLiked] = useState(!localStorage.getItem("like"));
+  const [IsLiked, setIsLiked] = useState(localStorage.getItem("like"));
   const [createMovies, setCreateMoves] = useState({});
   const moviesLikeButton = `movies__like ${
     IsLiked ? "movies__like_active" : ""
   }`;
 
   useEffect(() => {
-    setIsLiked(!localStorage.getItem("like"));
+    setIsLiked(localStorage.getItem("like"));
   }, []);
 
   const thumbnail = `https://api.nomoreparties.co/${info?.image.formats.thumbnail.url}`;

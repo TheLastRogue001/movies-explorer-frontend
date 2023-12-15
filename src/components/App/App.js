@@ -3,7 +3,6 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { FalseImg, TrueImg } from "../../images";
 import { apiMain } from "../../utils/MainApi";
-import { apiMovies } from "../../utils/MoviesApi";
 import Login from "../Auth/Login/Login";
 import NotFoundPage from "../Auth/NotFound/NotFoundPage";
 import Profile from "../Auth/Profile/Profile";
@@ -20,6 +19,8 @@ import Adaptive from "../web/adaptive/index";
 import Static from "../web/statics/index";
 import "./App.css";
 
+localStorage.removeItem("movies");
+
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -30,7 +31,7 @@ function App() {
   const [isSuccessInfoTooltipStatus, setIsSuccessInfoTooltipStatus] =
     useState(false);
 
-  const [isMoviesLoaded, setIsMoviesLoaded] = useState(false);
+  const [isMoviesLoaded, setIsMoviesLoaded] = useState(true);
 
   const [movies, setMovies] = useState([]);
 
@@ -65,16 +66,6 @@ function App() {
         .getUserProfile(token)
         .then((userData) => {
           setCurrentUser(userData);
-        })
-        .catch((err) => {
-          console.log(`Ошибка данных: ${err}`);
-        });
-      setIsMoviesLoaded(false);
-      apiMovies
-        .getInitialMovies()
-        .then((initialCards) => {
-          setMovies(initialCards);
-          setIsMoviesLoaded(true);
         })
         .catch((err) => {
           console.log(`Ошибка данных: ${err}`);
@@ -158,11 +149,11 @@ function App() {
                 element={
                   <ProtectedRouteElement
                     movies={movies}
-                    savedMovies={savedMovies}
+                    setMovies={setMovies}
                     loggedIn={loggedIn}
                     onRemoveMovies={handleRemoveMovies}
                     isMoviesLoaded={isMoviesLoaded}
-                    setSavedMovies={setSavedMovies}
+                    setIsMoviesLoaded={setIsMoviesLoaded}
                     element={Movies}
                   />
                 }

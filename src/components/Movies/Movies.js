@@ -1,16 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import SearchForm from "./SearchForm/SearchForm";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import { apiMovies } from "../../utils/MoviesApi";
+import { apiMain } from "../../utils/MainApi";
 import FilterCheckbox from "./FilterCheckbox/FilterCheckbox";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import Preloader from "../Preloader/Preloader";
 import MoviesCard from "./MoviesCard/MoviesCard";
 import "./Movies.css";
 
-function Movies({ movies, isMoviesLoaded, onRemoveMovies }) {
-  const width = window.innerWidth;
+function Movies({
+  movies,
+  setMovies,
+  setIsMoviesLoaded,
+  isMoviesLoaded,
+  onRemoveMovies,
+}) {
+  const [width, setWidth] = useState(0);
+  const [errors, setErrors] = useState("");
+  const [isValid, setIsValid] = useState(false);
   let movesCount = 12;
-  if (width <= 768) movesCount = 8;
-  if (width <= 480) movesCount = 5;
+  // if (width <= 768) movesCount = 8;
+  // if (width <= 480) movesCount = 5;
+  const [likedMovies, setLikeMovies] = useState([]);
   const [short, setShort] = useState(localStorage.getItem("short"));
   const [search, setSearch] = useState(localStorage.getItem("search"));
   const [buttonElse, setButtonElse] = useState(true);
@@ -18,9 +30,24 @@ function Movies({ movies, isMoviesLoaded, onRemoveMovies }) {
 
   let [filteredMovies, setFilteredMovies] = useState([]);
 
+  const currentUser = useContext(CurrentUserContext);
+
+  const handleSetMovies = (movies) => {
+    setMovies(movies);
+    setIsMoviesLoaded(true);
+  };
+
+  useEffect(() => {
+    setWidth(window.innerWidth);
+    if (width <= 768) movesCount = 8;
+    if (width <= 480) movesCount = 5;
+  });
+
   const handleSearchMovies = (e) => {
     setSearch(e.target.value);
-    if (search.length === 1) localStorage.setItem("search", "");
+    setErrors(e.target.validationMessage);
+    setIsValid(e.target.closest("form").checkValidity());
+    if (search?.length === 1) localStorage.setItem("search", "");
   };
 
   const handleCheckbox = (e) => {
@@ -29,33 +56,86 @@ function Movies({ movies, isMoviesLoaded, onRemoveMovies }) {
   };
 
   const handleSearchButton = () => {
-    let filtered = movies;
+    const initialMovies = apiMovies
+      .getInitialMovies()
+      .then((initialMovies) => {
+        localStorage.setItem("movies", JSON.stringify(initialMovies));
+        handleSetMovies(initialMovies);
+      })
+      .catch((err) => {
+        console.log(`Ошибка данных: ${err}`);
+      });
+    const savedMovies = apiMain
+      .getMovies()
+      .then((moviesData) => {
+        const movies = moviesData
+          .filter((item) => item.owner === currentUser?._id)
+          .map((movies) => {
+            if (movies.owner === currentUser?._id) {
+              return movies;
+            }
+          });
+        setLikeMovies(movies);
+      })
+      .catch((err) => {
+        console.log(`Ошибка данных: ${err}`);
+      });
 
-    if (search) {
-      const text = search.toLowerCase();
-      filtered = filtered.filter(
-        (moviesSearch) =>
-          moviesSearch.nameRU.toLowerCase().includes(text) ||
-          moviesSearch.nameEN.toLowerCase().includes(text)
-      );
-      localStorage.setItem("search", search);
-    }
+    Promise.all([savedMovies, initialMovies]).finally(() => {
+      let filtered = initialMovies;
 
-    if (short) {
-      filtered = filtered.filter((moviesShort) => moviesShort.duration < 40);
+      setButtonElse(true);
+
+      if (search) {
+        const text = search.toLowerCase();
+        filtered = filtered.filter(
+          (moviesSearch) =>
+            moviesSearch.nameRU.toLowerCase().includes(text) ||
+            moviesSearch.nameEN.toLowerCase().includes(text)
+        );
+        localStorage.setItem("search", search);
+      }
+
+      if (short) {
+        filtered = filtered.filter((moviesShort) => moviesShort.duration < 40);
+        setButtonElse(false);
+        localStorage.setItem("short", short);
+      }
+
+      if (short === false) localStorage.removeItem("short");
+
+      if (filtered.length - limitMovies * movesCount < limitMovies)
+        setButtonElse(false);
+
+      if (search === "") {
+        setErrors("Нужно ввести ключевое слово!");
+        setShort(false);
+        filtered = [];
+      }
+
+      setFilteredMovies(filtered ?? []);
+    });
+  };
+
+  const handleAddButton = () => {
+    if (filteredMovies.length - limitMovies * movesCount < limitMovies)
       setButtonElse(false);
-      localStorage.setItem("short", short);
-    }
-
-    if (short === false) localStorage.removeItem("short");
-
-    setFilteredMovies(filtered);
+    if (filteredMovies.length === 0) setButtonElse(true);
+    setLimitMovies(limitMovies + 1);
+    if (movesCount === 5) setLimitMovies(limitMovies + 0.4);
   };
 
   useEffect(() => {
     setSearch(localStorage.getItem("search"));
     setShort(localStorage.getItem("short"));
-    handleSearchButton();
+    let movies = [];
+    try {
+      movies = JSON.parse(localStorage.getItem("movies"));
+      if (Array.isArray(movies)) {
+        setFilteredMovies(movies);
+        handleSetMovies(movies);
+      }
+    } catch {}
   }, []);
 
   return (
@@ -67,10 +147,12 @@ function Movies({ movies, isMoviesLoaded, onRemoveMovies }) {
         }}
         className="movies__form"
         name="search"
+        noValidate
       >
         <SearchForm
           onChange={handleSearchMovies}
           search={search}
+          errors={errors}
           onClick={(e) => {
             e.preventDefault();
             handleSearchButton();
@@ -95,15 +177,7 @@ function Movies({ movies, isMoviesLoaded, onRemoveMovies }) {
       <section className="movies__continue">
         {buttonElse ? (
           <button
-            onClick={() => {
-              if (
-                filteredMovies.length - limitMovies * movesCount <
-                limitMovies
-              )
-                setButtonElse(false);
-              if (filteredMovies.length === 0) setButtonElse(true);
-              setLimitMovies(limitMovies + 1);
-            }}
+            onClick={handleAddButton}
             type="button"
             className="movies__next"
           >
