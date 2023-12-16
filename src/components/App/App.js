@@ -35,8 +35,6 @@ function App() {
 
   const [movies, setMovies] = useState([]);
 
-  const [savedMovies, setSavedMovies] = useState([]);
-
   const [loggedIn, setLoggedIn] = useState(false);
 
   const navigate = useNavigate();
@@ -105,19 +103,6 @@ function App() {
     setIsSuccessInfoTooltipStatus(status);
   };
 
-  const handleRemoveMovies = (id) => {
-    apiMain
-      .deleteMovies(id)
-      .then(() => {
-        setSavedMovies((movies) =>
-          movies.filter((movieItem) => id !== movieItem._id)
-        );
-      })
-      .catch((err) => {
-        console.log(`Возникла ошибка при удалении карточки: ${err}`);
-      });
-  };
-
   const handleNavigationClick = () => {
     setIsNavigationPopupOpen(true);
   };
@@ -151,7 +136,6 @@ function App() {
                     movies={movies}
                     setMovies={setMovies}
                     loggedIn={loggedIn}
-                    onRemoveMovies={handleRemoveMovies}
                     isMoviesLoaded={isMoviesLoaded}
                     setIsMoviesLoaded={setIsMoviesLoaded}
                     element={Movies}
@@ -163,10 +147,7 @@ function App() {
                 element={
                   <ProtectedRouteElement
                     element={SavedMovies}
-                    savedMovies={savedMovies}
-                    onRemoveMovies={handleRemoveMovies}
                     isMoviesLoaded={isMoviesLoaded}
-                    setSavedMovies={setSavedMovies}
                     loggedIn={loggedIn}
                   />
                 }

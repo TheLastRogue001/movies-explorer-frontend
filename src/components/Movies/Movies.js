@@ -9,19 +9,13 @@ import Preloader from "../Preloader/Preloader";
 import MoviesCard from "./MoviesCard/MoviesCard";
 import "./Movies.css";
 
-function Movies({
-  movies,
-  setMovies,
-  setIsMoviesLoaded,
-  isMoviesLoaded,
-  onRemoveMovies,
-}) {
+function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
   const [width, setWidth] = useState(0);
   const [errors, setErrors] = useState("");
-  const [isValid, setIsValid] = useState(false);
   let movesCount = 12;
   // if (width <= 768) movesCount = 8;
   // if (width <= 480) movesCount = 5;
+  const [allMovies, setAllMovies] = useState([]);
   const [likedMovies, setLikeMovies] = useState([]);
   const [short, setShort] = useState(localStorage.getItem("short"));
   const [search, setSearch] = useState(localStorage.getItem("search"));
@@ -33,8 +27,7 @@ function Movies({
   const currentUser = useContext(CurrentUserContext);
 
   const handleSetMovies = (movies) => {
-    setMovies(movies);
-    setIsMoviesLoaded(true);
+    setAllMovies(movies);
   };
 
   useEffect(() => {
@@ -46,7 +39,6 @@ function Movies({
   const handleSearchMovies = (e) => {
     setSearch(e.target.value);
     setErrors(e.target.validationMessage);
-    setIsValid(e.target.closest("form").checkValidity());
     if (search?.length === 1) localStorage.setItem("search", "");
   };
 
@@ -56,16 +48,20 @@ function Movies({
   };
 
   const handleSearchButton = () => {
-    const initialMovies = apiMovies
+    setIsMoviesLoaded(false);
+    setFilteredMovies([]);
+    setAllMovies([]);
+    const gInitialMovies = apiMovies
       .getInitialMovies()
-      .then((initialMovies) => {
-        localStorage.setItem("movies", JSON.stringify(initialMovies));
-        handleSetMovies(initialMovies);
+      .then((iMovies) => {
+        localStorage.setItem("movies", JSON.stringify(iMovies));
+        handleSetMovies(iMovies);
       })
       .catch((err) => {
         console.log(`Ошибка данных: ${err}`);
       });
-    const savedMovies = apiMain
+
+    const gSavedMovies = apiMain
       .getMovies()
       .then((moviesData) => {
         const movies = moviesData
@@ -81,8 +77,8 @@ function Movies({
         console.log(`Ошибка данных: ${err}`);
       });
 
-    Promise.all([savedMovies, initialMovies]).finally(() => {
-      let filtered = initialMovies;
+    Promise.all([gSavedMovies, gInitialMovies]).finally(() => {
+      let filtered = allMovies;
 
       setButtonElse(true);
 
@@ -113,6 +109,7 @@ function Movies({
         filtered = [];
       }
 
+      setIsMoviesLoaded(true);
       setFilteredMovies(filtered ?? []);
     });
   };
@@ -136,6 +133,8 @@ function Movies({
         handleSetMovies(movies);
       }
     } catch {}
+    filteredMovies.length = 1;
+    setButtonElse(false);
   }, []);
 
   return (
@@ -170,8 +169,15 @@ function Movies({
         ) : null}
         {filteredMovies
           .slice(0 * movesCount, limitMovies * movesCount)
-          .map((info, key) => (
-            <MoviesCard key={key} onRemoveMovies={onRemoveMovies} info={info} />
+          .map((info) => (
+            <MoviesCard
+              key={info.id}
+              setAllMovies={setAllMovies}
+              filteredMovies={filteredMovies}
+              setFilteredMovies={setFilteredMovies}
+              likedMovies={likedMovies}
+              info={info}
+            />
           ))}
       </MoviesCardList>
       <section className="movies__continue">

@@ -8,18 +8,15 @@ import Preloader from "../Preloader/Preloader";
 import SavedMoviesCard from "../SavedMovies/SavedMoviesCard/SavedMoviesCard";
 import "./SavedMovies.css";
 
-function SavedMovies({
-  savedMovies,
-  onRemoveMovies,
-  setSavedMovies,
-  isMoviesLoaded,
-}) {
+function SavedMovies({ isMoviesLoaded }) {
+  const [savedMovies, setSavedMovies] = useState([]);
   const [savedShort, setSavedShort] = useState(
     localStorage.getItem("saved-short")
   );
   const [savedSearch, setSavedSearch] = useState(
     localStorage.getItem("saved-search")
   );
+  const [errors, setErrors] = useState("");
 
   let [filteredMovies, setFilteredMovies] = useState([]);
 
@@ -27,7 +24,8 @@ function SavedMovies({
 
   const handleSearchMovies = (e) => {
     setSavedSearch(e.target.value);
-    if (savedSearch.length === 1) localStorage.setItem("saved-search", "");
+    setErrors(e.target.validationMessage);
+    if (savedSearch?.length === 1) localStorage.setItem("saved-search", "");
   };
 
   const handleCheckbox = (e) => {
@@ -55,13 +53,20 @@ function SavedMovies({
 
     if (savedShort === false) localStorage.removeItem("saved-short");
 
-    setFilteredMovies(filtered);
+    if (savedSearch === "") {
+      setErrors("Нужно ввести ключевое слово!");
+      setSavedShort(false);
+    }
+
+    setFilteredMovies(filtered ?? []);
   };
 
   useEffect(() => {
     let filtered = savedMovies;
-    setFilteredMovies(filtered);
+    setFilteredMovies(filtered ?? []);
   }, [savedMovies, savedSearch, savedShort]);
+
+  useEffect(() => {}, [savedMovies]);
 
   useEffect(() => {
     apiMain
@@ -84,12 +89,18 @@ function SavedMovies({
     setSavedShort(localStorage.getItem("saved-short"));
   }, []);
 
+  console.log(filteredMovies);
   return (
     <main className="movies">
-      <form onSubmit={handleSearchButton} className="movies__form" name="search">
+      <form
+        onSubmit={handleSearchButton}
+        className="movies__form"
+        name="search"
+      >
         <SearchForm
           onChange={handleSearchMovies}
           search={savedSearch}
+          errors={errors}
           onClick={handleSearchButton}
         />
         <div className="movies__switch">
@@ -99,13 +110,15 @@ function SavedMovies({
       </form>
       <MoviesCardList>
         {!isMoviesLoaded ? <Preloader /> : null}
-        {filteredMovies.length === 0 && isMoviesLoaded ? (
+        {filteredMovies?.length === 0 && isMoviesLoaded ? (
           <h2 className="movies__not-found">Ничего не найдено!</h2>
         ) : null}
         {filteredMovies.map((movies, key) => (
           <SavedMoviesCard
-            key={key}
-            onClickRemove={onRemoveMovies}
+            key={movies.moviesId}
+            filteredMovies={filteredMovies}
+            setFilteredMovies={setFilteredMovies}
+            setSavedMovies={setSavedMovies}
             movies={movies}
           />
         ))}

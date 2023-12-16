@@ -1,27 +1,71 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { apiMain } from "../../../utils/MainApi";
+import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 
 import "./MoviesCard.css";
 
-const MoviesCard = ({ info, onRemoveMovies }) => {
-  const [IsLiked, setIsLiked] = useState(localStorage.getItem("like"));
+const MoviesCard = ({
+  info,
+  setAllMovies,
+  setFilteredMovies,
+  filteredMovies,
+}) => {
+  const [likedMovies, setLikedMovies] = useState([]);
   const [createMovies, setCreateMoves] = useState({});
+
+  const currentUser = useContext(CurrentUserContext);
+
+  function isLiked(item) {
+    for (const linked of likedMovies) {
+      if (linked.movieId === item.id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   const moviesLikeButton = `movies__like ${
-    IsLiked ? "movies__like_active" : ""
+    isLiked(info) ? "movies__like_active" : ""
   }`;
 
   useEffect(() => {
-    setIsLiked(localStorage.getItem("like"));
-  }, []);
+    apiMain.getMovies().then((moviesData) => {
+      const movies = moviesData
+        .filter((item) => item.owner === currentUser?._id)
+        .map((movies) => {
+          if (movies.owner === currentUser?._id) {
+            return movies;
+          }
+        });
+      setLikedMovies(movies);
+    });
+  }, [createMovies]);
 
   const thumbnail = `https://api.nomoreparties.co/${info?.image.formats.thumbnail.url}`;
   const image = `https://api.nomoreparties.co/${info?.image.url}`;
 
   const handleLikeClick = () => {
-    setIsLiked(!localStorage.setItem("like", !IsLiked));
-    if (IsLiked === false) {
-      setIsLiked(true);
-      return apiMain
+    if (isLiked(info)) {
+      for (let linked of likedMovies)
+        if (info.id === linked.movieId) {
+          apiMain
+            .deleteMovies(linked._id)
+            .then((removeMovies) => {
+              const movies = filteredMovies.filter(
+                (item) => item._id !== removeMovies._id
+              );
+              console.log(movies);
+              setFilteredMovies(movies);
+              setAllMovies(movies);
+              setLikedMovies(movies);
+            })
+            .catch((err) => {
+              console.log(`Возникла ошибка при удалении карточки: ${err}`);
+            });
+        }
+    }
+    if (isLiked(info) === false) {
+      apiMain
         .createMovies(
           info.country,
           info.director,
@@ -41,10 +85,6 @@ const MoviesCard = ({ info, onRemoveMovies }) => {
         .catch((err) => {
           console.log(`Возникла ошибка с лайками: ${err}`);
         });
-    }
-    if (IsLiked) {
-      setIsLiked(false);
-      return onRemoveMovies(createMovies._id);
     }
   };
 
