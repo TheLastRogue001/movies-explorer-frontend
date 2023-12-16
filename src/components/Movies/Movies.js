@@ -13,8 +13,8 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
   const [width, setWidth] = useState(0);
   const [errors, setErrors] = useState("");
   let movesCount = 12;
-  // if (width <= 768) movesCount = 8;
-  // if (width <= 480) movesCount = 5;
+  if (width <= 768) movesCount = 8;
+  if (width <= 480) movesCount = 5;
   const [allMovies, setAllMovies] = useState([]);
   const [likedMovies, setLikeMovies] = useState([]);
   const [short, setShort] = useState(localStorage.getItem("short"));

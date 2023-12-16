@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { FalseImg, TrueImg } from "../../images";
 import { apiMain } from "../../utils/MainApi";
@@ -38,14 +38,29 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
-      apiMain
+      const getUser = apiMain
+        .getUserProfile(token)
+        .then((userData) => {
+          setCurrentUser(userData);
+        })
+        .catch((err) => {
+          console.log(`Ошибка данных: ${err}`);
+        });
+      const checkToken = apiMain
         .checkToken(token)
         .then((userData) => {
-          navigate("/movies", { replace: true });
+          if (location.pathname === "/movies")
+            navigate("/movies", { replace: true });
+          if (location.pathname === "/saved-movies")
+            navigate("/saved-movies", { replace: true });
+          if (location.pathname === "/profile")
+            navigate("/profile", { replace: true });
+          if (location.pathname === "/") navigate("/", { replace: true });
         })
         .then(() => {
           setLoggedIn(true);
@@ -54,20 +69,7 @@ function App() {
           localStorage.removeItem("jwt");
           console.log(`Ошибка: ${e}`);
         });
-    }
-  }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      apiMain
-        .getUserProfile(token)
-        .then((userData) => {
-          setCurrentUser(userData);
-        })
-        .catch((err) => {
-          console.log(`Ошибка данных: ${err}`);
-        });
+      Promise.all([checkToken, getUser]);
     }
   }, [loggedIn]);
 

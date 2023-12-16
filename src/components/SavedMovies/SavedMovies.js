@@ -89,7 +89,6 @@ function SavedMovies({ isMoviesLoaded }) {
     setSavedShort(localStorage.getItem("saved-short"));
   }, []);
 
-  console.log(filteredMovies);
   return (
     <main className="movies">
       <form
@@ -113,9 +112,9 @@ function SavedMovies({ isMoviesLoaded }) {
         {filteredMovies?.length === 0 && isMoviesLoaded ? (
           <h2 className="movies__not-found">Ничего не найдено!</h2>
         ) : null}
-        {filteredMovies.map((movies, key) => (
+        {filteredMovies.map((movies) => (
           <SavedMoviesCard
-            key={movies.moviesId}
+            key={movies.movieId}
             filteredMovies={filteredMovies}
             setFilteredMovies={setFilteredMovies}
             setSavedMovies={setSavedMovies}

@@ -125,7 +125,7 @@ function Profile({ onExitClick, onUpdateUser }) {
                 Редактировать
               </button>
               <Link
-                to="/signin"
+                to="/"
                 onClick={onExitClick}
                 className="profile__exit"
               >
