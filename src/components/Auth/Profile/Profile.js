@@ -48,8 +48,6 @@ function Profile({ onExitClick, onUpdateUser }) {
       name: fields.name,
       email: fields.email,
     });
-
-    resetForm();
   };
 
   const textInfo = `profile__p ${IsInfo ? "" : "profile__p_disabled"}`;

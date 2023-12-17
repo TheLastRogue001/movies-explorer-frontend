@@ -61,6 +61,8 @@ function App() {
           if (location.pathname === "/profile")
             navigate("/profile", { replace: true });
           if (location.pathname === "/") navigate("/", { replace: true });
+          if (location.pathname === "/signin") navigate("/movies", { replace: true });
+          if (location.pathname === "/signup") navigate("/movies", { replace: true });
         })
         .then(() => {
           setLoggedIn(true);

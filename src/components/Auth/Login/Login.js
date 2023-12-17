@@ -50,7 +50,6 @@ function Login({ onInfoAuth, handleLogin }) {
       .catch((err) => {
         onInfoAuth(false);
       });
-    resetForm();
   };
 
   const navigate = useNavigate();

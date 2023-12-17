@@ -1,20 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import { apiMain } from "../../../utils/MainApi";
-import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 
 import "./MoviesCard.css";
 
-const MoviesCard = ({
-  info,
-  setAllMovies,
-  setFilteredMovies,
-  filteredMovies,
-}) => {
-  const [likedMovies, setLikedMovies] = useState([]);
-  const [createMovies, setCreateMoves] = useState({});
-
-  const currentUser = useContext(CurrentUserContext);
-
+const MoviesCard = ({ info, likedMovies, setLikeMovies }) => {
   function isLiked(item) {
     for (const linked of likedMovies) {
       if (linked.movieId === item.id) {
@@ -28,19 +17,6 @@ const MoviesCard = ({
     isLiked(info) ? "movies__like_active" : ""
   }`;
 
-  useEffect(() => {
-    apiMain.getMovies().then((moviesData) => {
-      const movies = moviesData
-        .filter((item) => item.owner === currentUser?._id)
-        .map((movies) => {
-          if (movies.owner === currentUser?._id) {
-            return movies;
-          }
-        });
-      setLikedMovies(movies);
-    });
-  }, [createMovies]);
-
   const thumbnail = `https://api.nomoreparties.co/${info?.image.formats.thumbnail.url}`;
   const image = `https://api.nomoreparties.co/${info?.image.url}`;
 
@@ -51,13 +27,10 @@ const MoviesCard = ({
           apiMain
             .deleteMovies(linked._id)
             .then((removeMovies) => {
-              const movies = filteredMovies.filter(
-                (item) => item._id !== removeMovies._id
-              );
-              console.log(movies);
-              setFilteredMovies(movies);
-              setAllMovies(movies);
-              setLikedMovies(movies);
+              const movies = likedMovies.filter((item) => {
+                return item._id !== removeMovies._id;
+              });
+              setLikeMovies(movies);
             })
             .catch((err) => {
               console.log(`Возникла ошибка при удалении карточки: ${err}`);
@@ -80,7 +53,7 @@ const MoviesCard = ({
           info.nameEN
         )
         .then((newMovies) => {
-          setCreateMoves(newMovies);
+          setLikeMovies(movies => [...movies, newMovies]);
         })
         .catch((err) => {
           console.log(`Возникла ошибка с лайками: ${err}`);

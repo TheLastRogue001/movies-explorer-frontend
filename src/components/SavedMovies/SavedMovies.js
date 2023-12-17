@@ -11,7 +11,7 @@ import "./SavedMovies.css";
 function SavedMovies({ isMoviesLoaded }) {
   const [savedMovies, setSavedMovies] = useState([]);
   const [savedShort, setSavedShort] = useState(
-    localStorage.getItem("saved-short")
+    parseLocalStorageBoolean("saved-short")
   );
   const [savedSearch, setSavedSearch] = useState(
     localStorage.getItem("saved-search")
@@ -27,6 +27,10 @@ function SavedMovies({ isMoviesLoaded }) {
     setErrors(e.target.validationMessage);
     if (savedSearch?.length === 1) localStorage.setItem("saved-search", "");
   };
+
+  function parseLocalStorageBoolean(pre) {
+    return localStorage.getItem(pre) === "true";
+  }
 
   const handleCheckbox = (e) => {
     setSavedShort(e.target.checked);
@@ -51,7 +55,7 @@ function SavedMovies({ isMoviesLoaded }) {
       localStorage.setItem("saved-short", savedShort);
     }
 
-    if (savedShort === false) localStorage.removeItem("saved-short");
+    if (savedShort === false) localStorage.setItem("saved-short", false);
 
     if (savedSearch === "") {
       setErrors("Нужно ввести ключевое слово!");
@@ -86,7 +90,7 @@ function SavedMovies({ isMoviesLoaded }) {
       });
 
     setSavedSearch(localStorage.getItem("saved-search"));
-    setSavedShort(localStorage.getItem("saved-short"));
+    setSavedShort(parseLocalStorageBoolean("saved-short"));
   }, []);
 
   return (

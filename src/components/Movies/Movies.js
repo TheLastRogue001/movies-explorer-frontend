@@ -10,31 +10,21 @@ import MoviesCard from "./MoviesCard/MoviesCard";
 import "./Movies.css";
 
 function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
-  const [width, setWidth] = useState(0);
+  const [width, setWidth] = useState(window.innerWidth);
   const [errors, setErrors] = useState("");
   let movesCount = 12;
   if (width <= 768) movesCount = 8;
   if (width <= 480) movesCount = 5;
-  const [allMovies, setAllMovies] = useState([]);
   const [likedMovies, setLikeMovies] = useState([]);
-  const [short, setShort] = useState(localStorage.getItem("short"));
+  const [short, setShort] = useState(parseLocalStorageBoolean("short"));
   const [search, setSearch] = useState(localStorage.getItem("search"));
-  const [buttonElse, setButtonElse] = useState(true);
+  const [buttonElse, setButtonElse] = useState(false);
   const [limitMovies, setLimitMovies] = useState(1);
+  const [nothingMovies, setNothingMovies] = useState(false);
 
   let [filteredMovies, setFilteredMovies] = useState([]);
 
   const currentUser = useContext(CurrentUserContext);
-
-  const handleSetMovies = (movies) => {
-    setAllMovies(movies);
-  };
-
-  useEffect(() => {
-    setWidth(window.innerWidth);
-    if (width <= 768) movesCount = 8;
-    if (width <= 480) movesCount = 5;
-  });
 
   const handleSearchMovies = (e) => {
     setSearch(e.target.value);
@@ -42,20 +32,21 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
     if (search?.length === 1) localStorage.setItem("search", "");
   };
 
+  function parseLocalStorageBoolean(pre) {
+    return localStorage.getItem(pre) === "true";
+  }
+
   const handleCheckbox = (e) => {
     setShort(e.target.checked);
-    if (short) setButtonElse(true);
   };
 
   const handleSearchButton = () => {
     setIsMoviesLoaded(false);
     setFilteredMovies([]);
-    setAllMovies([]);
     const gInitialMovies = apiMovies
       .getInitialMovies()
       .then((iMovies) => {
         localStorage.setItem("movies", JSON.stringify(iMovies));
-        handleSetMovies(iMovies);
       })
       .catch((err) => {
         console.log(`Ошибка данных: ${err}`);
@@ -78,7 +69,10 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
       });
 
     Promise.all([gSavedMovies, gInitialMovies]).finally(() => {
-      let filtered = allMovies;
+      setNothingMovies(false);
+      let movies = [];
+      movies = JSON.parse(localStorage.getItem("movies"));
+      let filtered = movies;
 
       setButtonElse(true);
 
@@ -89,16 +83,19 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
             moviesSearch.nameRU.toLowerCase().includes(text) ||
             moviesSearch.nameEN.toLowerCase().includes(text)
         );
+        if (filtered.length === 0) setNothingMovies(true);
         localStorage.setItem("search", search);
       }
 
       if (short) {
-        filtered = filtered.filter((moviesShort) => moviesShort.duration < 40);
+        filtered = filtered.filter((moviesShort) => {
+          if (moviesShort.duration < 40) localStorage.setItem("short", short);
+          return moviesShort.duration < 40;
+        });
         setButtonElse(false);
-        localStorage.setItem("short", short);
       }
 
-      if (short === false) localStorage.removeItem("short");
+      if (short === false) localStorage.setItem("short", false);
 
       if (filtered.length - limitMovies * movesCount < limitMovies)
         setButtonElse(false);
@@ -106,6 +103,14 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
       if (search === "") {
         setErrors("Нужно ввести ключевое слово!");
         setShort(false);
+        setButtonElse(false);
+        filtered = [];
+      }
+
+      if (search === null) {
+        setErrors("Нужно ввести ключевое слово!");
+        setShort(false);
+        setButtonElse(false);
         filtered = [];
       }
 
@@ -118,23 +123,31 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
     if (filteredMovies.length - limitMovies * movesCount < limitMovies)
       setButtonElse(false);
     if (filteredMovies.length === 0) setButtonElse(true);
-    setLimitMovies(limitMovies + 1);
+    if (movesCount >= 12) setLimitMovies(limitMovies + 0.25);
+    if (movesCount === 8) setLimitMovies(limitMovies + 0.25);
     if (movesCount === 5) setLimitMovies(limitMovies + 0.4);
   };
 
   useEffect(() => {
     setSearch(localStorage.getItem("search"));
-    setShort(localStorage.getItem("short"));
+    setShort(parseLocalStorageBoolean("short"));
     let movies = [];
     try {
       movies = JSON.parse(localStorage.getItem("movies"));
       if (Array.isArray(movies)) {
         setFilteredMovies(movies);
-        handleSetMovies(movies);
       }
     } catch {}
     filteredMovies.length = 1;
     setButtonElse(false);
+    if (localStorage.getItem("search") || localStorage.getItem("short"))
+      handleSearchButton();
+
+    const handleResizeWindow = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResizeWindow);
+    return () => {
+      window.removeEventListener("resize", handleResizeWindow);
+    };
   }, []);
 
   return (
@@ -164,7 +177,7 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
       </form>
       <MoviesCardList>
         {!isMoviesLoaded ? <Preloader /> : null}
-        {filteredMovies.length === 0 && isMoviesLoaded ? (
+        {nothingMovies && isMoviesLoaded ? (
           <h2 className="movies__not-found">Ничего не найдено!</h2>
         ) : null}
         {filteredMovies
@@ -172,10 +185,8 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
           .map((info) => (
             <MoviesCard
               key={info.id}
-              setAllMovies={setAllMovies}
-              filteredMovies={filteredMovies}
-              setFilteredMovies={setFilteredMovies}
               likedMovies={likedMovies}
+              setLikeMovies={setLikeMovies}
               info={info}
             />
           ))}

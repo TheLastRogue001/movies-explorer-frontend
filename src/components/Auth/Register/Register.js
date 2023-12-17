@@ -60,7 +60,6 @@ function Register({ onInfoAuth, handleLogin }) {
           onInfoAuth(false);
         });
     }
-    resetForm();
   };
 
   const navigate = useNavigate();
