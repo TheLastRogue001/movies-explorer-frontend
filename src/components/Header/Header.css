@@ -227,6 +227,10 @@
     display: none;
   }
 
+  .header__components-profile_loggedin {
+    display: none;
+  }
+
   .header__pages {
     display: none;
   }
