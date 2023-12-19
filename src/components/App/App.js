@@ -3,6 +3,7 @@ import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { FalseImg, TrueImg } from "../../images";
 import { apiMain } from "../../utils/MainApi";
+import { apiMovies } from "../../utils/MoviesApi";
 import Login from "../Auth/Login/Login";
 import NotFoundPage from "../Auth/NotFound/NotFoundPage";
 import Profile from "../Auth/Profile/Profile";
@@ -61,8 +62,10 @@ function App() {
           if (location.pathname === "/profile")
             navigate("/profile", { replace: true });
           if (location.pathname === "/") navigate("/", { replace: true });
-          if (location.pathname === "/signin") navigate("/movies", { replace: true });
-          if (location.pathname === "/signup") navigate("/movies", { replace: true });
+          if (location.pathname === "/signin")
+            navigate("/movies", { replace: true });
+          if (location.pathname === "/signup")
+            navigate("/movies", { replace: true });
         })
         .then(() => {
           setLoggedIn(true);
@@ -71,7 +74,15 @@ function App() {
           localStorage.removeItem("jwt");
           console.log(`Ошибка: ${e}`);
         });
-      Promise.all([checkToken, getUser]);
+      const gInitialMovies = apiMovies
+        .getInitialMovies()
+        .then((iMovies) => {
+          localStorage.setItem("movies", JSON.stringify(iMovies));
+        })
+        .catch((err) => {
+          console.log(`Ошибка данных: ${err}`);
+        });
+      Promise.all([checkToken, getUser, gInitialMovies]);
     }
   }, [loggedIn]);
 

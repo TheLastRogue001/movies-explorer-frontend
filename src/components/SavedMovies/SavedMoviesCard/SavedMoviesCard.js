@@ -25,7 +25,7 @@ const SavedMoviesCard = ({
               (item) => item._id !== removeMovies._id
             );
             setFilteredMovies(movies);
-            setSavedMovies(movies);
+            // setSavedMovies(movies);
           })
           .catch((err) => {
             console.log(`Возникла ошибка при удалении карточки: ${err}`);

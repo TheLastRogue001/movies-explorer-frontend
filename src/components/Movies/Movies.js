@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import SearchForm from "./SearchForm/SearchForm";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import { apiMovies } from "../../utils/MoviesApi";
 import { apiMain } from "../../utils/MainApi";
 import FilterCheckbox from "./FilterCheckbox/FilterCheckbox";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
@@ -13,6 +12,7 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
   const [width, setWidth] = useState(window.innerWidth);
   const [errors, setErrors] = useState("");
   let movesCount = 12;
+  if (width <= 1000) movesCount = 8;
   if (width <= 768) movesCount = 8;
   if (width <= 480) movesCount = 5;
   const [likedMovies, setLikeMovies] = useState([]);
@@ -40,19 +40,8 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
     setShort(e.target.checked);
   };
 
-  const handleSearchButton = () => {
-    setIsMoviesLoaded(false);
-    setFilteredMovies([]);
-    const gInitialMovies = apiMovies
-      .getInitialMovies()
-      .then((iMovies) => {
-        localStorage.setItem("movies", JSON.stringify(iMovies));
-      })
-      .catch((err) => {
-        console.log(`Ошибка данных: ${err}`);
-      });
-
-    const gSavedMovies = apiMain
+  const getMoviesData = () => {
+    apiMain
       .getMovies()
       .then((moviesData) => {
         const movies = moviesData
@@ -67,68 +56,71 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
       .catch((err) => {
         console.log(`Ошибка данных: ${err}`);
       });
+  };
 
-    Promise.all([gSavedMovies, gInitialMovies]).finally(() => {
-      setNothingMovies(false);
-      let movies = [];
-      movies = JSON.parse(localStorage.getItem("movies"));
-      let filtered = movies;
+  const handleSearchButton = () => {
+    let movies = [];
+    movies = JSON.parse(localStorage.getItem("movies"));
+    let filtered = movies ? movies : [];
+    setButtonElse(true);
+    setFilteredMovies([]);
+    setNothingMovies(false);
+    getMoviesData();
 
-      setButtonElse(true);
+    if (search) {
+      const text = search.toLowerCase();
+      filtered = filtered.filter(
+        (moviesSearch) =>
+          moviesSearch.nameRU.toLowerCase().includes(text) ||
+          moviesSearch.nameEN.toLowerCase().includes(text)
+      );
+      if (filtered.length === 0) setNothingMovies(true);
+      localStorage.setItem("search", search);
+    }
 
-      if (search) {
-        const text = search.toLowerCase();
-        filtered = filtered.filter(
-          (moviesSearch) =>
-            moviesSearch.nameRU.toLowerCase().includes(text) ||
-            moviesSearch.nameEN.toLowerCase().includes(text)
-        );
-        if (filtered.length === 0) setNothingMovies(true);
-        localStorage.setItem("search", search);
-      }
+    if (short) {
+      filtered = filtered.filter((moviesShort) => {
+        if (moviesShort.duration < 40) localStorage.setItem("short", short);
+        return moviesShort.duration < 40;
+      });
+      setButtonElse(false);
+    }
 
-      if (short) {
-        filtered = filtered.filter((moviesShort) => {
-          if (moviesShort.duration < 40) localStorage.setItem("short", short);
-          return moviesShort.duration < 40;
-        });
-        setButtonElse(false);
-      }
+    if (short === false) localStorage.setItem("short", false);
 
-      if (short === false) localStorage.setItem("short", false);
+    if (filtered.length - limitMovies * movesCount < limitMovies)
+      setButtonElse(false);
 
-      if (filtered.length - limitMovies * movesCount < limitMovies)
-        setButtonElse(false);
+    if (search === "") {
+      setErrors("Нужно ввести ключевое слово!");
+      setButtonElse(false);
+      filtered = [];
+    }
 
-      if (search === "") {
-        setErrors("Нужно ввести ключевое слово!");
-        setShort(false);
-        setButtonElse(false);
-        filtered = [];
-      }
+    if (search === null) {
+      setErrors("Нужно ввести ключевое слово!");
+      setButtonElse(false);
+      filtered = [];
+    }
 
-      if (search === null) {
-        setErrors("Нужно ввести ключевое слово!");
-        setShort(false);
-        setButtonElse(false);
-        filtered = [];
-      }
-
-      setIsMoviesLoaded(true);
-      setFilteredMovies(filtered ?? []);
-    });
+    setFilteredMovies(filtered ?? []);
+    setIsMoviesLoaded(true);
   };
 
   const handleAddButton = () => {
     if (filteredMovies.length - limitMovies * movesCount < limitMovies)
       setButtonElse(false);
     if (filteredMovies.length === 0) setButtonElse(true);
-    if (movesCount >= 12) setLimitMovies(limitMovies + 0.25);
-    if (movesCount === 8) setLimitMovies(limitMovies + 0.25);
-    if (movesCount === 5) setLimitMovies(limitMovies + 0.4);
+    if (width > 1280) setLimitMovies(limitMovies + 0.25);
+    if (width <= 1280) setLimitMovies(limitMovies + 0.25);
+    if (width <= 1136) setLimitMovies(limitMovies + 0.17);
+    if (width <= 1000) setLimitMovies(limitMovies + 0.25);
+    if (width <= 768) setLimitMovies(limitMovies + 0.25);
+    if (width <= 480) setLimitMovies(limitMovies + 0.4);
   };
 
   useEffect(() => {
+    setIsMoviesLoaded(false);
     setSearch(localStorage.getItem("search"));
     setShort(parseLocalStorageBoolean("short"));
     let movies = [];
@@ -140,8 +132,10 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
     } catch {}
     filteredMovies.length = 1;
     setButtonElse(false);
-    if (localStorage.getItem("search") || localStorage.getItem("short"))
-      handleSearchButton();
+    setTimeout(() => {
+      if (localStorage.getItem("movies")) handleSearchButton();
+      setIsMoviesLoaded(true);
+    }, 230);
 
     const handleResizeWindow = () => setWidth(window.innerWidth);
     window.addEventListener("resize", handleResizeWindow);
@@ -150,11 +144,41 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
     };
   }, []);
 
+  useEffect(() => {
+    let movies = [];
+    movies = JSON.parse(localStorage.getItem("movies"));
+    let filtered = movies ? movies : [];
+
+    if (short) {
+      filtered = filtered.filter((moviesShort) => {
+        if (moviesShort.duration < 40) localStorage.setItem("short", short);
+        return moviesShort.duration < 40;
+      });
+      setButtonElse(false);
+    }
+
+    if (search) {
+      const text = search.toLowerCase();
+      filtered = filtered.filter(
+        (moviesSearch) =>
+          moviesSearch.nameRU.toLowerCase().includes(text) ||
+          moviesSearch.nameEN.toLowerCase().includes(text)
+      );
+      if (filtered.length === 0) setNothingMovies(true);
+      localStorage.setItem("search", search);
+    }
+
+    if (short === false) localStorage.setItem("short", false);
+
+    setFilteredMovies(filtered ?? []);
+  }, [short]);
+
   return (
     <main className="movies">
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          setIsMoviesLoaded(false);
           handleSearchButton();
         }}
         className="movies__form"
@@ -167,6 +191,7 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
           errors={errors}
           onClick={(e) => {
             e.preventDefault();
+            setIsMoviesLoaded(false);
             handleSearchButton();
           }}
         />

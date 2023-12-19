@@ -17,6 +17,7 @@ function SavedMovies({ isMoviesLoaded }) {
     localStorage.getItem("saved-search")
   );
   const [errors, setErrors] = useState("");
+  const [nothingMovies, setNothingMovies] = useState(false);
 
   let [filteredMovies, setFilteredMovies] = useState([]);
 
@@ -36,17 +37,20 @@ function SavedMovies({ isMoviesLoaded }) {
     setSavedShort(e.target.checked);
   };
 
-  const handleSearchButton = (e) => {
-    e.preventDefault();
-    let filtered = savedMovies;
+  const handleSearchButton = () => {
+    let movies = [];
+    movies = JSON.parse(localStorage.getItem("saved-movies"));
+    let filtered = movies ? movies : [];
+    setNothingMovies(false);
 
     if (savedSearch) {
-      const s = savedSearch.toLowerCase();
+      const text = savedSearch.toLowerCase();
       filtered = filtered.filter(
         (moviesSearch) =>
-          moviesSearch.nameRU.toLowerCase().includes(s) ||
-          moviesSearch.nameEN.toLowerCase().includes(s)
+          moviesSearch.nameRU.toLowerCase().includes(text) ||
+          moviesSearch.nameEN.toLowerCase().includes(text)
       );
+      if (filtered.length === 0) setNothingMovies(true);
       localStorage.setItem("saved-search", savedSearch);
     }
 
@@ -56,9 +60,13 @@ function SavedMovies({ isMoviesLoaded }) {
     }
 
     if (savedShort === false) localStorage.setItem("saved-short", false);
-
     if (savedSearch === "") {
-      setErrors("Нужно ввести ключевое слово!");
+      filtered = movies;
+      setSavedShort(false);
+    }
+
+    if (savedSearch === null) {
+      filtered = movies;
       setSavedShort(false);
     }
 
@@ -66,16 +74,11 @@ function SavedMovies({ isMoviesLoaded }) {
   };
 
   useEffect(() => {
-    let filtered = savedMovies;
-    setFilteredMovies(filtered ?? []);
-  }, [savedMovies, savedSearch, savedShort]);
-
-  useEffect(() => {}, [savedMovies]);
-
-  useEffect(() => {
     apiMain
       .getMovies()
       .then((moviesData) => {
+        setSavedSearch(localStorage.getItem("saved-search"));
+        setSavedShort(parseLocalStorageBoolean("saved-short"));
         const movies = moviesData
           .filter((item) => item.owner === currentUser?._id)
           .map((movies) => {
@@ -83,28 +86,71 @@ function SavedMovies({ isMoviesLoaded }) {
               return movies;
             }
           });
-        setSavedMovies(movies);
+        localStorage.setItem("saved-movies", JSON.stringify(movies));
       })
       .catch((err) => {
         console.log(`Ошибка данных: ${err}`);
       });
-
-    setSavedSearch(localStorage.getItem("saved-search"));
-    setSavedShort(parseLocalStorageBoolean("saved-short"));
+    let movies = [];
+    try {
+      movies = JSON.parse(localStorage.getItem("saved-movies"));
+      if (Array.isArray(movies)) {
+        setFilteredMovies(movies);
+        handleSearchButton();
+        setNothingMovies(false);
+      }
+    } catch {}
   }, []);
+
+  useEffect(() => {
+    setNothingMovies(false);
+    let movies = [];
+    movies = JSON.parse(localStorage.getItem("saved-movies"));
+    let filtered = movies ? movies : [];
+
+    if (savedShort) {
+      filtered = filtered.filter((moviesShort) => {
+        if (moviesShort.duration < 40) localStorage.setItem("short", savedShort);
+        return moviesShort.duration < 40;
+      });
+      if (filtered.length === 0) setNothingMovies(true);
+    }
+
+    if (savedSearch) {
+      const text = savedSearch.toLowerCase();
+      filtered = filtered.filter(
+        (moviesSearch) =>
+          moviesSearch.nameRU.toLowerCase().includes(text) ||
+          moviesSearch.nameEN.toLowerCase().includes(text)
+      );
+      if (filtered.length === 0) setNothingMovies(true);
+      localStorage.setItem("saved-search", savedSearch);
+    }
+
+    if (savedShort === false) localStorage.setItem("saved-short", false);
+
+    setFilteredMovies(filtered ?? []);
+  }, [savedShort]);
 
   return (
     <main className="movies">
       <form
-        onSubmit={handleSearchButton}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSearchButton();
+        }}
         className="movies__form"
         name="search"
+        noValidate
       >
         <SearchForm
           onChange={handleSearchMovies}
           search={savedSearch}
           errors={errors}
-          onClick={handleSearchButton}
+          onClick={(e) => {
+            e.preventDefault();
+            handleSearchButton();
+          }}
         />
         <div className="movies__switch">
           <FilterCheckbox isOn={savedShort} handleToggle={handleCheckbox} />
@@ -113,7 +159,7 @@ function SavedMovies({ isMoviesLoaded }) {
       </form>
       <MoviesCardList>
         {!isMoviesLoaded ? <Preloader /> : null}
-        {filteredMovies?.length === 0 && isMoviesLoaded ? (
+        {nothingMovies && isMoviesLoaded ? (
           <h2 className="movies__not-found">Ничего не найдено!</h2>
         ) : null}
         {filteredMovies.map((movies) => (
@@ -121,7 +167,6 @@ function SavedMovies({ isMoviesLoaded }) {
             key={movies.movieId}
             filteredMovies={filteredMovies}
             setFilteredMovies={setFilteredMovies}
-            setSavedMovies={setSavedMovies}
             movies={movies}
           />
         ))}
