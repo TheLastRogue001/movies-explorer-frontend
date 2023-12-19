@@ -86,8 +86,9 @@ function SavedMovies({ isMoviesLoaded }) {
               return movies;
             }
           });
+        setNothingMovies(false);
+        if(!localStorage.getItem("saved-movies")) setFilteredMovies(movies);
         localStorage.setItem("saved-movies", JSON.stringify(movies));
-        setFilteredMovies(movies);
       })
       .catch((err) => {
         console.log(`Ошибка данных: ${err}`);
@@ -111,7 +112,8 @@ function SavedMovies({ isMoviesLoaded }) {
 
     if (savedShort) {
       filtered = filtered.filter((moviesShort) => {
-        if (moviesShort.duration < 40) localStorage.setItem("short", savedShort);
+        if (moviesShort.duration < 40)
+          localStorage.setItem("short", savedShort);
         return moviesShort.duration < 40;
       });
       if (filtered.length === 0) setNothingMovies(true);
