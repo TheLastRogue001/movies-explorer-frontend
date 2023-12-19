@@ -87,6 +87,7 @@ function SavedMovies({ isMoviesLoaded }) {
             }
           });
         localStorage.setItem("saved-movies", JSON.stringify(movies));
+        setFilteredMovies(movies);
       })
       .catch((err) => {
         console.log(`Ошибка данных: ${err}`);
