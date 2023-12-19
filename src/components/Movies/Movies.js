@@ -154,6 +154,7 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
         if (moviesShort.duration < 40) localStorage.setItem("short", short);
         return moviesShort.duration < 40;
       });
+      if (filtered.length === 0) setNothingMovies(true);
       setButtonElse(false);
     }
 

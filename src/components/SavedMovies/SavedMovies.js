@@ -56,6 +56,7 @@ function SavedMovies({ isMoviesLoaded }) {
 
     if (savedShort) {
       filtered = filtered.filter((moviesShort) => moviesShort.duration < 40);
+      if (filtered.length === 0) setNothingMovies(true);
       localStorage.setItem("saved-short", savedShort);
     }
 
