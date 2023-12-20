@@ -6,11 +6,7 @@ const ProtectedRouteElement = ({
   loggedIn,
   ...restProps
 }) => {
-  return loggedIn ? (
-    <Component {...restProps} />
-  ) : (
-    <Navigate to="/" replace />
-  );
+  return loggedIn ? <Component {...restProps} /> : <Navigate to="/" replace />;
 };
 
 export default ProtectedRouteElement;

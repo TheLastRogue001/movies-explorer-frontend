@@ -1,5 +1,4 @@
 import { RightArrow } from "../../../images";
-import { useState } from "react";
 import "./SearchForm.css";
 
 const SearchForm = ({ onChange, onClick, search, errors }) => {

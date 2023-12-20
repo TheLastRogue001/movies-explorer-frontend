@@ -13,7 +13,12 @@
   background: #202020;
 }
 
+.header__movies_loggedin {
+  background: #073042;
+}
+
 .header__link {
+  padding-bottom: 5px;
   color: #fff;
   text-align: right;
   font-family: "Inter", Arial, Helvetica, sans-serif;
@@ -135,6 +140,15 @@
   box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.08);
 }
 
+.header__components-profile_loggedin {
+  width: 90px;
+  height: 32px;
+  border-radius: 40px;
+  column-gap: 7px;
+  background: #073042;
+  box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.08);
+}
+
 .header__checkbox[type="checkbox"] {
   display: none;
 }
@@ -211,6 +225,10 @@
   }
 
   .header__components-profile {
+    display: none;
+  }
+
+  .header__components-profile_loggedin {
     display: none;
   }
 

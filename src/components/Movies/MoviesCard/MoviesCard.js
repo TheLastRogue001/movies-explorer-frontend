@@ -1,30 +1,90 @@
+import React from "react";
+import { apiMain } from "../../../utils/MainApi";
+
 import "./MoviesCard.css";
 
-const MoviesCard = ({ Movie, isLiked, remove }) => {
-  const moviesLikeButton = `movies__like ${
-    isLiked ? "movies__like_active" : ""
-  }`;
-  const getButton = () => {
-    if (remove) {
-      return (
-        <button type="button" aria-label="Удалить" className="movies__remove" />
-      );
+const MoviesCard = ({ info, likedMovies, setLikeMovies }) => {
+  function isLiked(item) {
+    for (const linked of likedMovies) {
+      if (linked.movieId === item.id) {
+        return true;
+      }
     }
-    return (
-      <button
-        type="button"
-        aria-label="Нравится"
-        className={moviesLikeButton}
-      />
-    );
+    return false;
+  }
+
+  const moviesLikeButton = `movies__like ${
+    isLiked(info) ? "movies__like_active" : ""
+  }`;
+
+  const thumbnail = `https://api.nomoreparties.co/${info?.image.formats.thumbnail.url}`;
+  const image = `https://api.nomoreparties.co/${info?.image.url}`;
+
+  const handleLikeClick = () => {
+    if (isLiked(info)) {
+      for (let linked of likedMovies)
+        if (info.id === linked.movieId) {
+          apiMain
+            .deleteMovies(linked._id)
+            .then((removeMovies) => {
+              const movies = likedMovies.filter((item) => {
+                return item._id !== removeMovies._id;
+              });
+              setLikeMovies(movies);
+            })
+            .catch((err) => {
+              console.log(`Возникла ошибка при удалении карточки: ${err}`);
+            });
+        }
+    }
+    if (isLiked(info) === false) {
+      apiMain
+        .createMovies(
+          info.country,
+          info.director,
+          info.duration,
+          info.year,
+          info.description,
+          image,
+          info.trailerLink,
+          thumbnail,
+          info.id,
+          info.nameRU,
+          info.nameEN
+        )
+        .then((newMovies) => {
+          setLikeMovies(movies => [...movies, newMovies]);
+        })
+        .catch((err) => {
+          console.log(`Возникла ошибка с лайками: ${err}`);
+        });
+    }
   };
+
+  function toHoursAndMinutes(totalMinutes) {
+    const minutes = totalMinutes % 60;
+    const hours = Math.floor(totalMinutes / 60);
+
+    return `${hours}ч ${minutes}м`;
+  }
+
   return (
     <li className="movies__card">
-      <img src={Movie} alt="Фильм" className="movies__img" />
-      <div className="movies__info">
-        <h2 className="movies__title">33 слова о дизайне</h2>
-        <div className="movies__content">{getButton()}</div>
-        <label className="movies__time">1ч 47м</label>
+      <a href={info?.trailerLink} rel="noreferrer" target="_blank">
+        <img src={image} alt="Фильм" className="movies__img" />
+      </a>
+      <div className="movies__info_like">
+        <h2 className="movies__title">{info?.nameRU || info?.nameEN}</h2>
+        <div className="movies__content">
+          <button
+            aria-label="Нравится"
+            onClick={handleLikeClick}
+            className={moviesLikeButton}
+          />
+        </div>
+        <label className="movies__time_like">
+          {toHoursAndMinutes(info?.duration)}
+        </label>
       </div>
     </li>
   );

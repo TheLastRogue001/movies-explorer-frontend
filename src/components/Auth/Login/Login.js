@@ -1,22 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "../../../images";
 import "./Login.css";
-// import * as auth from "../utils/auth";
+import { apiMain } from "../../../utils/MainApi";
 
-function Login() {
-  const [formValue, setFormValue] = useState({
-    email: "",
-    password: "",
-  });
+function Login({ onInfoAuth, handleLogin }) {
+  const [fields, setFields] = useState({});
+  const [errors, setErrors] = useState({});
+  const [isValid, setIsValid] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  function isValiEmail(val) {
+    let regEmail =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regEmail.test(val);
+  }
 
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
+  const handleChange = (event) => {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const type = target.type;
+    setFields({ ...fields, [name]: value });
+    setErrors({ ...errors, [name]: target.validationMessage });
+    const emailValid = type === "email" ? isValiEmail(value) : true;
+    if (!emailValid) setErrors({ ...errors, [name]: "Невалидный email" });
+    setIsValid(target.closest("form").checkValidity() && emailValid);
+  };
+
+  const resetForm = useCallback(
+    (newValues = {}, newErrors = {}, newIsValid = false) => {
+      setFields(newValues);
+      setErrors(newErrors);
+      setIsValid(newIsValid);
+    },
+    [setFields, setErrors, setIsValid]
+  );
+
+  const contactSubmit = (e) => {
+    e.preventDefault();
+
+    apiMain
+      .authorize(fields.email, fields.password)
+      .then((data) => {
+        if (data.token) {
+          handleLogin();
+          navigate("/movies", { replace: true });
+        }
+      })
+      .catch((err) => {
+        onInfoAuth(false);
+      });
   };
 
   const navigate = useNavigate();
@@ -28,7 +61,12 @@ function Login() {
           <img className="sign__img" src={Logo} alt="Логотип" />
         </Link>
         <h1 className="sign__title">Рады видеть!</h1>
-        <form className="sign__form" name="login">
+        <form
+          className="sign__form"
+          onSubmit={(e) => contactSubmit(e)}
+          name="login"
+          noValidate
+        >
           <div className="sign__components">
             <div className="sign__info">
               <label className="sign__label">E-mail</label>
@@ -40,11 +78,11 @@ function Login() {
                 min-length="2"
                 max-length="40"
                 placeholder="E-mail"
-                onChange={handleChange}
-                value={formValue.email}
+                onChange={(e) => handleChange(e)}
+                value={fields.email ?? ""}
                 className="sign__input"
               ></input>
-              <span className="sign__input-error"></span>
+              <span className="sign__input-error">{errors.email}</span>
             </div>
             <div className="sign__info">
               <label className="sign__label">Пароль</label>
@@ -56,14 +94,20 @@ function Login() {
                 max-length="40"
                 placeholder="Пароль"
                 required
-                onChange={handleChange}
-                value={formValue.password}
+                onChange={(e) => handleChange(e)}
+                value={fields.password ?? ""}
                 className="sign__input"
               ></input>
-              <span className="sign__input-error"></span>
+              <span className="sign__input-error">{errors.password}</span>
             </div>
           </div>
-          <button type="submit" className="sign__button">
+          <button
+            id="submit"
+            type="submit"
+            value="Submit"
+            disabled={!isValid}
+            className="sign__button"
+          >
             Войти
           </button>
           <div className="sign__register">

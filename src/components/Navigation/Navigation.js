@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { IconProfile } from "../../images";
 import { Link } from "react-router-dom";
 import "./Navigation.css";
-// import * as auth from "../utils/auth";
 
 function Navigation({ isOpen, onClose }) {
   const [isClickMain, setIsClickMain] = useState(false);

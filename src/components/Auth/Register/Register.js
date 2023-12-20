@@ -1,23 +1,65 @@
-import { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "../../../images";
 import "./Register.css";
-// import * as auth from "../utils/auth";
+import { apiMain } from "../../../utils/MainApi";
 
-function Register() {
-  const [formValue, setFormValue] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+function Register({ onInfoAuth, handleLogin }) {
+  const [fields, setFields] = useState({});
+  const [errors, setErrors] = useState({});
+  const [isValid, setIsValid] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  function isValiEmail(val) {
+    let regEmail =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regEmail.test(val);
+  }
 
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
+  const handleChange = (event) => {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const type = target.type;
+    setFields({ ...fields, [name]: value });
+    setErrors({ ...errors, [name]: target.validationMessage });
+    const emailValid = type === "email" ? isValiEmail(value) : true;
+    if (!emailValid) setErrors({ ...errors, [name]: "Невалидный email" });
+    setIsValid(target.closest("form").checkValidity() && emailValid);
+  };
+
+  const resetForm = useCallback(
+    (newValues = {}, newErrors = {}, newIsValid = false) => {
+      setFields(newValues);
+      setErrors(newErrors);
+      setIsValid(newIsValid);
+    },
+    [setFields, setErrors, setIsValid]
+  );
+
+  const contactSubmit = (e) => {
+    e.preventDefault();
+    if (fields.password) {
+      apiMain
+        .register(fields.name, fields.email, fields.password)
+        .then((res) => {
+          onInfoAuth(true);
+        })
+        .catch((err) => {
+          onInfoAuth(false);
+        });
+
+      apiMain
+        .authorize(fields.email, fields.password)
+        .then((data) => {
+          if (data.token) {
+            handleLogin();
+            navigate("/movies", { replace: true });
+          }
+        })
+        .catch((err) => {
+          onInfoAuth(false);
+        });
+    }
   };
 
   const navigate = useNavigate();
@@ -29,7 +71,12 @@ function Register() {
           <img className="register__img" src={Logo} alt="Логотип" />
         </Link>
         <h1 className="register__title">Добро пожаловать!</h1>
-        <form className="register__form" name="register">
+        <form
+          className="register__form"
+          onSubmit={(e) => contactSubmit(e)}
+          name="register"
+          noValidate
+        >
           <div className="register__components">
             <div className="register__info">
               <label className="register__label">Имя</label>
@@ -41,11 +88,11 @@ function Register() {
                 min-length="2"
                 max-length="40"
                 placeholder="Имя"
-                onChange={handleChange}
-                value={formValue.name}
+                onChange={(e) => handleChange(e)}
+                value={fields.name ?? ""}
                 className="register__input"
               ></input>
-              <span className="register__input-error"></span>
+              <span className="register__input-error">{errors.name}</span>
             </div>
             <div className="register__info">
               <label className="register__label">E-mail</label>
@@ -57,11 +104,13 @@ function Register() {
                 min-length="2"
                 max-length="40"
                 placeholder="E-mail"
-                onChange={handleChange}
-                value={formValue.email}
+                onChange={(e) => {
+                  handleChange(e);
+                }}
+                value={fields.email ?? ""}
                 className="register__input"
               ></input>
-              <span className="register__input-error"></span>
+              <span className="register__input-error">{errors.email}</span>
             </div>
             <div className="register__info">
               <label className="register__label">Пароль</label>
@@ -70,19 +119,23 @@ function Register() {
                 type="password"
                 name="password"
                 required
-                min-length="2"
+                min-length="8"
                 max-length="40"
                 placeholder="Пароль"
-                onChange={handleChange}
-                value={formValue.password}
+                onChange={(e) => handleChange(e)}
+                value={fields.password ?? ""}
                 className="register__input"
               ></input>
-              <span className="register__input-error">
-                Что-то пошло не так...
-              </span>
+              <span className="register__input-error">{errors.password}</span>
             </div>
           </div>
-          <button type="submit" className="register__button">
+          <button
+            id="submit"
+            type="submit"
+            value="Submit"
+            disabled={!isValid}
+            className="register__button"
+          >
             Зарегистрироваться
           </button>
           <div className="register__signup">
