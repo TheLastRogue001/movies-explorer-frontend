@@ -1,5 +1,5 @@
 import { IconProfile, Logo, Menu } from "../../images";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, NavLink } from "react-router-dom";
 import "./Header.css";
 
 const getHeader = (onNavigationClick) => {
@@ -13,12 +13,12 @@ const getHeader = (onNavigationClick) => {
           <img className="header__logo" alt="Логотип" src={Logo} />
         </Link>
         <div className="header__pages">
-          <Link className="header__link" to="/movies">
+          <NavLink style={({ isActive }) => ({ borderBottom: isActive ? "1px solid #fff" : "none" })} className="header__link" to="/movies">
             Фильмы
-          </Link>
-          <Link className="header__link" to="/saved-movies">
+          </NavLink>
+          <NavLink style={({ isActive }) => ({ borderBottom: isActive ? "1px solid #fff" : "none" })} className="header__link" to="/saved-movies">
             Сохраненные фильмы
-          </Link>
+          </NavLink>
         </div>
       </div>
       <label className="header__label" htmlFor="info-header">

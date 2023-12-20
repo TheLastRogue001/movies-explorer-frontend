@@ -12,8 +12,10 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
   const [width, setWidth] = useState(window.innerWidth);
   const [errors, setErrors] = useState("");
   let movesCount = 12;
+  if (width <= 1136) movesCount = 8;
   if (width <= 1000) movesCount = 8;
   if (width <= 768) movesCount = 8;
+  if (width <= 689) movesCount = 5;
   if (width <= 480) movesCount = 5;
   const [likedMovies, setLikeMovies] = useState([]);
   const [short, setShort] = useState(parseLocalStorageBoolean("short"));
@@ -113,9 +115,10 @@ function Movies({ setIsMoviesLoaded, isMoviesLoaded }) {
     if (filteredMovies.length === 0) setButtonElse(true);
     if (width > 1280) setLimitMovies(limitMovies + 0.25);
     if (width <= 1280) setLimitMovies(limitMovies + 0.25);
-    if (width <= 1136) setLimitMovies(limitMovies + 0.17);
+    if (width <= 1136) setLimitMovies(limitMovies + 0.25);
     if (width <= 1000) setLimitMovies(limitMovies + 0.25);
     if (width <= 768) setLimitMovies(limitMovies + 0.25);
+    if (width <= 689) setLimitMovies(limitMovies + 0.4);
     if (width <= 480) setLimitMovies(limitMovies + 0.4);
   };
 

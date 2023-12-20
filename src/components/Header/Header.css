@@ -18,6 +18,7 @@
 }
 
 .header__link {
+  padding-bottom: 5px;
   color: #fff;
   text-align: right;
   font-family: "Inter", Arial, Helvetica, sans-serif;
